@@ -1,0 +1,7 @@
+{
+  "/api/users/current": "/current_user",
+  "/api/transactions/purchase": "/transactions",
+  "/api/transactions/sell": "/transactions",
+  "/api/transactions/return": "/transactions",
+  "/api/*": "/$1"
+}

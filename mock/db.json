@@ -1,0 +1,640 @@
+{
+  "categories": [
+    {
+      "id": "3",
+      "name": "Clothing"
+    },
+    {
+      "id": "4",
+      "name": "Home & Kitchen"
+    },
+    {
+      "id": "202e",
+      "name": "hello"
+    },
+    {
+      "id": "4fee",
+      "name": "Office Supplies"
+    },
+    {
+      "name": "Comb",
+      "id": "sBAlGsa"
+    }
+  ],
+  "products": [
+    {
+      "id": "103",
+      "name": "Men's T-Shirt",
+      "sku": "TS-303-BLU",
+      "price": 19.99,
+      "stockQuantity": 200,
+      "categoryId": 3,
+      "description": "100% cotton t-shirt.",
+      "imageUrl": "https://placehold.co/600x400/EEE/31343C?text=T-Shirt"
+    },
+    {
+      "id": "105",
+      "name": "Coffee Maker",
+      "sku": "CM-405-BLK",
+      "price": 89.99,
+      "stockQuantity": 60,
+      "categoryId": 4,
+      "description": "12-cup programmable coffee maker.",
+      "imageUrl": "https://placehold.co/600x400/EEE/31343C?text=Coffee+Maker"
+    },
+    {
+      "id": "106",
+      "name": "Women's Jeans",
+      "sku": "JN-306-DNM",
+      "price": 59.95,
+      "stockQuantity": 150,
+      "categoryId": 3,
+      "description": "High-waisted skinny jeans.",
+      "imageUrl": "https://placehold.co/600x400/EEE/31343C?text=Jeans"
+    },
+    {
+      "id": "109",
+      "name": "Air Fryer",
+      "sku": "AF-409-SLV",
+      "price": 120,
+      "stockQuantity": 90,
+      "categoryId": 4,
+      "description": "5.8-quart electric air fryer.",
+      "imageUrl": "https://placehold.co/600x400/EEE/31343C?text=Air+Fryer"
+    },
+    {
+      "id": "110",
+      "name": "Hoodie",
+      "sku": "HD-310-GRY",
+      "price": 49.99,
+      "stockQuantity": 250,
+      "categoryId": 3,
+      "description": "Comfortable fleece hoodie.",
+      "imageUrl": "https://placehold.co/600x400/EEE/31343C?text=Hoodie"
+    },
+    {
+      "id": "HPmqm47"
+    },
+    {
+      "id": "2_hVe9Z"
+    }
+  ],
+  "suppliers": [
+    {
+      "id": "1",
+      "name": "Electro World Inc.",
+      "contactInfo": "contact@electroworld.com",
+      "address": "123 Tech Avenue, Silicon Valley, CA"
+    },
+    {
+      "id": "2",
+      "name": "Publishing House Co.",
+      "contactInfo": "sales@publishco.com",
+      "address": "456 Book Street, New York, NY"
+    },
+    {
+      "id": "3",
+      "name": "Fashion Forward Ltd.",
+      "contactInfo": "support@fashionltd.com",
+      "address": "789 Style Road, Los Angeles, CA"
+    },
+    {
+      "id": "1ae5",
+      "name": "dfd",
+      "contactInfo": "994",
+      "address": "sdf"
+    },
+    {
+      "name": "fdsg",
+      "contactInfo": "7e567",
+      "address": "sfgs",
+      "id": "g03uHG6"
+    }
+  ],
+  "users": [
+    {
+      "id": "1",
+      "name": "Admin User",
+      "email": "dwivedi@gmail.com",
+      "password": "12345",
+      "phoneNumber": "123-456-7890",
+      "role": "ADMIN"
+    },
+    {
+      "id": "2",
+      "name": "Jane Doe",
+      "email": "jane.doe@example.com",
+      "password": "password123",
+      "phoneNumber": "098-765-4321",
+      "role": "USER"
+    },
+    {
+      "id": "3",
+      "name": "Manager Mike",
+      "email": "manager@example.com",
+      "password": "managerpassword",
+      "phoneNumber": "555-555-5555",
+      "role": "MANAGER"
+    },
+    {
+      "name": "vishu",
+      "email": "ayush@gmail.com",
+      "password": "12345",
+      "phoneNumber": "23424",
+      "role": "MANAGER",
+      "id": "6oq971o"
+    }
+  ],
+  "transactions": [
+    {
+      "id": "1",
+      "transactionType": "PURCHASE",
+      "status": "PENDING",
+      "description": "Weekly restock of mice.",
+      "note": "Invoice #INV-2025-001",
+      "totalProducts": 5,
+      "totalPrice": 129.95,
+      "createdAt": "2025-09-02T10:30:00Z",
+      "updatedAt": "2025-09-03T11:00:00Z",
+      "product": {
+        "id": 101,
+        "name": "Wireless Mouse",
+        "sku": "WM-101-BLK",
+        "price": 25.99,
+        "stockQuantity": 150,
+        "description": "Ergonomic wireless mouse.",
+        "imageUrl": "https://placehold.co/600x400/EEE/31343C?text=Mouse"
+      },
+      "user": {
+        "id": 1,
+        "name": "Admin User",
+        "email": "admin@example.com",
+        "phoneNumber": "123-456-7890",
+        "role": "ADMIN"
+      },
+      "supplier": {
+        "id": 1,
+        "name": "Electro World Inc.",
+        "contactInfo": "contact@electroworld.com",
+        "address": "123 Tech Avenue, Silicon Valley, CA"
+      }
+    },
+    {
+      "id": "2",
+      "transactionType": "SELL",
+      "status": "COMPLETED",
+      "description": "Customer sale of book.",
+      "note": "Receipt #RCPT-2025-001",
+      "totalProducts": 1,
+      "totalPrice": 39.95,
+      "createdAt": "2025-09-05T14:00:00Z",
+      "updatedAt": "2025-09-05T14:05:00Z",
+      "product": {
+        "id": 102,
+        "name": "React for Beginners",
+        "sku": "RB-202-PAP",
+        "price": 39.95,
+        "stockQuantity": 80,
+        "description": "A guide to learning React.",
+        "imageUrl": "https://placehold.co/600x400/EEE/31343C?text=Book"
+      },
+      "user": {
+        "id": 2,
+        "name": "Jane Doe",
+        "email": "jane.doe@example.com",
+        "phoneNumber": "098-765-4321",
+        "role": "USER"
+      },
+      "supplier": null
+    },
+    {
+      "id": "3",
+      "transactionType": "SELL",
+      "status": "PENDING",
+      "description": "Online order for t-shirt.",
+      "note": "Order #ORD-2025-001",
+      "totalProducts": 2,
+      "totalPrice": 39.98,
+      "createdAt": "2025-09-10T11:00:00Z",
+      "updatedAt": null,
+      "product": {
+        "id": 103,
+        "name": "Men's T-Shirt",
+        "sku": "TS-303-BLU",
+        "price": 19.99,
+        "stockQuantity": 200,
+        "description": "100% cotton t-shirt.",
+        "imageUrl": "https://placehold.co/600x400/EEE/31343C?text=T-Shirt"
+      },
+      "user": {
+        "id": 1,
+        "name": "Admin User",
+        "email": "admin@example.com",
+        "phoneNumber": "123-456-7890",
+        "role": "ADMIN"
+      },
+      "supplier": null
+    },
+    {
+      "id": "4",
+      "transactionType": "PURCHASE",
+      "status": "PROCESSING",
+      "description": "Bulk order of keyboards.",
+      "note": "PO #PO-2025-002",
+      "totalProducts": 20,
+      "totalPrice": 910,
+      "createdAt": "2025-09-11T09:00:00Z",
+      "updatedAt": "2025-09-11T09:30:00Z",
+      "product": {
+        "id": 104,
+        "name": "Bluetooth Keyboard",
+        "sku": "KB-104-WHT",
+        "price": 45.5,
+        "stockQuantity": 120,
+        "description": "Compact and silent keyboard.",
+        "imageUrl": "https://placehold.co/600x400/EEE/31343C?text=Keyboard"
+      },
+      "user": {
+        "id": 1,
+        "name": "Admin User",
+        "email": "admin@example.com",
+        "phoneNumber": "123-456-7890",
+        "role": "ADMIN"
+      },
+      "supplier": {
+        "id": 1,
+        "name": "Electro World Inc.",
+        "contactInfo": "contact@electroworld.com",
+        "address": "123 Tech Avenue, Silicon Valley, CA"
+      }
+    },
+    {
+      "id": "5",
+      "transactionType": "SELL",
+      "status": "CANCELLED",
+      "description": "Customer return of mouse.",
+      "note": "RMA #RMA-2025-001",
+      "totalProducts": 1,
+      "totalPrice": 25.99,
+      "createdAt": "2025-09-12T15:00:00Z",
+      "updatedAt": "2025-09-12T15:10:00Z",
+      "product": {
+        "id": 101,
+        "name": "Wireless Mouse",
+        "sku": "WM-101-BLK",
+        "price": 25.99,
+        "stockQuantity": 150,
+        "description": "Ergonomic wireless mouse.",
+        "imageUrl": "https://placehold.co/600x400/EEE/31343C?text=Mouse"
+      },
+      "user": {
+        "id": 2,
+        "name": "Jane Doe",
+        "email": "jane.doe@example.com",
+        "phoneNumber": "098-765-4321",
+        "role": "USER"
+      },
+      "supplier": null
+    },
+    {
+      "id": "6",
+      "transactionType": "SELL",
+      "status": "COMPLETED",
+      "description": "In-store t-shirt sale.",
+      "note": "Receipt #RCPT-2025-002",
+      "totalProducts": 3,
+      "totalPrice": 59.97,
+      "createdAt": "2025-09-13T13:20:00Z",
+      "updatedAt": "2025-09-13T13:21:00Z",
+      "product": {
+        "id": 103,
+        "name": "Men's T-Shirt",
+        "sku": "TS-303-BLU",
+        "price": 19.99,
+        "stockQuantity": 200,
+        "description": "100% cotton t-shirt.",
+        "imageUrl": "https://placehold.co/600x400/EEE/31343C?text=T-Shirt"
+      },
+      "user": {
+        "id": 2,
+        "name": "Jane Doe",
+        "email": "jane.doe@example.com",
+        "phoneNumber": "098-765-4321",
+        "role": "USER"
+      },
+      "supplier": null
+    },
+    {
+      "id": "7",
+      "transactionType": "PURCHASE",
+      "status": "COMPLETED",
+      "description": "New book shipment.",
+      "note": "Invoice #INV-2025-003",
+      "totalProducts": 15,
+      "totalPrice": 599.25,
+      "createdAt": "2025-09-14T10:00:00Z",
+      "updatedAt": "2025-09-14T11:00:00Z",
+      "product": {
+        "id": 102,
+        "name": "React for Beginners",
+        "sku": "RB-202-PAP",
+        "price": 39.95,
+        "stockQuantity": 80,
+        "description": "A guide to learning React.",
+        "imageUrl": "https://placehold.co/600x400/EEE/31343C?text=Book"
+      },
+      "user": {
+        "id": 1,
+        "name": "Admin User",
+        "email": "admin@example.com",
+        "phoneNumber": "123-456-7890",
+        "role": "ADMIN"
+      },
+      "supplier": {
+        "id": 2,
+        "name": "Publishing House Co.",
+        "contactInfo": "sales@publishco.com",
+        "address": "456 Book Street, New York, NY"
+      }
+    },
+    {
+      "id": "8",
+      "transactionType": "SELL",
+      "status": "PENDING",
+      "description": "Web order for keyboards.",
+      "note": "Order #ORD-2025-002",
+      "totalProducts": 1,
+      "totalPrice": 45.5,
+      "createdAt": "2025-09-14T18:00:00Z",
+      "updatedAt": null,
+      "product": {
+        "id": 104,
+        "name": "Bluetooth Keyboard",
+        "sku": "KB-104-WHT",
+        "price": 45.5,
+        "stockQuantity": 120,
+        "description": "Compact and silent keyboard.",
+        "imageUrl": "https://placehold.co/600x400/EEE/31343C?text=Keyboard"
+      },
+      "user": {
+        "id": 2,
+        "name": "Jane Doe",
+        "email": "jane.doe@example.com",
+        "phoneNumber": "098-765-4321",
+        "role": "USER"
+      },
+      "supplier": null
+    },
+    {
+      "id": "9",
+      "transactionType": "SELL",
+      "status": "COMPLETED",
+      "description": "Sale of multiple mice.",
+      "note": "Receipt #RCPT-2025-003",
+      "totalProducts": 4,
+      "totalPrice": 103.96,
+      "createdAt": "2025-09-15T11:45:00Z",
+      "updatedAt": "2025-09-15T11:46:00Z",
+      "product": {
+        "id": 101,
+        "name": "Wireless Mouse",
+        "sku": "WM-101-BLK",
+        "price": 25.99,
+        "stockQuantity": 150,
+        "description": "Ergonomic wireless mouse.",
+        "imageUrl": "https://placehold.co/600x400/EEE/31343C?text=Mouse"
+      },
+      "user": {
+        "id": 1,
+        "name": "Admin User",
+        "email": "admin@example.com",
+        "phoneNumber": "123-456-7890",
+        "role": "ADMIN"
+      },
+      "supplier": null
+    },
+    {
+      "id": "10",
+      "transactionType": "PURCHASE",
+      "status": "CANCELLED",
+      "description": "Special order of books.",
+      "note": "PO #PO-2025-003",
+      "totalProducts": 5,
+      "totalPrice": 199.75,
+      "createdAt": "2025-09-15T14:00:00Z",
+      "updatedAt": null,
+      "product": {
+        "id": 102,
+        "name": "React for Beginners",
+        "sku": "RB-202-PAP",
+        "price": 39.95,
+        "stockQuantity": 80,
+        "description": "A guide to learning React.",
+        "imageUrl": "https://placehold.co/600x400/EEE/31343C?text=Book"
+      },
+      "user": {
+        "id": 1,
+        "name": "Admin User",
+        "email": "admin@example.com",
+        "phoneNumber": "123-456-7890",
+        "role": "ADMIN"
+      },
+      "supplier": {
+        "id": 2,
+        "name": "Publishing House Co.",
+        "contactInfo": "sales@publishco.com",
+        "address": "456 Book Street, New York, NY"
+      }
+    },
+    {
+      "id": "11",
+      "transactionType": "SELL",
+      "status": "PROCESSING",
+      "description": "Bulk corporate t-shirt order.",
+      "note": "Order #ORD-2025-003",
+      "totalProducts": 50,
+      "totalPrice": 999.5,
+      "createdAt": "2025-09-15T16:30:00Z",
+      "updatedAt": "2025-09-15T17:00:00Z",
+      "product": {
+        "id": 103,
+        "name": "Men's T-Shirt",
+        "sku": "TS-303-BLU",
+        "price": 19.99,
+        "stockQuantity": 200,
+        "description": "100% cotton t-shirt.",
+        "imageUrl": "https://placehold.co/600x400/EEE/31343C?text=T-Shirt"
+      },
+      "user": {
+        "id": 1,
+        "name": "Admin User",
+        "email": "admin@example.com",
+        "phoneNumber": "123-456-7890",
+        "role": "ADMIN"
+      },
+      "supplier": null
+    },
+    {
+      "productId": "103",
+      "quantity": 5,
+      "id": "-OAdXsn"
+    },
+    {
+      "productId": "105",
+      "quantity": 34,
+      "id": "iWwiQ5F"
+    },
+    {
+      "product": {
+        "id": "103",
+        "name": "Men's T-Shirt",
+        "sku": "TS-303-BLU",
+        "price": 19.99,
+        "stockQuantity": 200,
+        "categoryId": 3,
+        "description": "100% cotton t-shirt.",
+        "imageUrl": "https://placehold.co/600x400/EEE/31343C?text=T-Shirt"
+      },
+      "user": {
+        "name": "Current User"
+      },
+      "quantity": 2,
+      "description": "sdf",
+      "note": "asdf",
+      "transactionType": "SELL",
+      "status": "PENDING",
+      "totalProducts": 2,
+      "totalPrice": 39.98,
+      "createdAt": "2025-09-15T19:31:01.367Z",
+      "id": "9rjvjVr"
+    },
+    {
+      "product": {
+        "id": "103",
+        "name": "Men's T-Shirt",
+        "sku": "TS-303-BLU",
+        "price": 19.99,
+        "stockQuantity": 200,
+        "categoryId": 3,
+        "description": "100% cotton t-shirt.",
+        "imageUrl": "https://placehold.co/600x400/EEE/31343C?text=T-Shirt"
+      },
+      "supplier": {
+        "id": "2",
+        "name": "Publishing House Co.",
+        "contactInfo": "sales@publishco.com",
+        "address": "456 Book Street, New York, NY"
+      },
+      "user": {
+        "name": "Current User"
+      },
+      "quantity": 9,
+      "description": "dsf",
+      "note": "sdf",
+      "transactionType": "PURCHASE",
+      "status": "COMPLETED",
+      "totalProducts": 9,
+      "totalPrice": 179.91,
+      "createdAt": "2025-09-15T19:35:08.157Z",
+      "id": "DK5i0BC"
+    },
+    {
+      "product": {
+        "id": "103",
+        "name": "Men's T-Shirt",
+        "sku": "TS-303-BLU",
+        "price": 19.99,
+        "stockQuantity": 200,
+        "categoryId": 3,
+        "description": "100% cotton t-shirt.",
+        "imageUrl": "https://placehold.co/600x400/EEE/31343C?text=T-Shirt"
+      },
+      "supplier": {
+        "id": "2",
+        "name": "Publishing House Co.",
+        "contactInfo": "sales@publishco.com",
+        "address": "456 Book Street, New York, NY"
+      },
+      "user": {
+        "name": "Current User"
+      },
+      "quantity": 9,
+      "description": "dsf",
+      "note": "sdf",
+      "transactionType": "PURCHASE",
+      "status": "COMPLETED",
+      "totalProducts": 9,
+      "totalPrice": 179.91,
+      "createdAt": "2025-09-15T19:36:06.869Z",
+      "id": "4EATcpI"
+    },
+    {
+      "product": {
+        "id": "103",
+        "name": "Men's T-Shirt",
+        "sku": "TS-303-BLU",
+        "price": 19.99,
+        "stockQuantity": 200,
+        "categoryId": 3,
+        "description": "100% cotton t-shirt.",
+        "imageUrl": "https://placehold.co/600x400/EEE/31343C?text=T-Shirt"
+      },
+      "supplier": {
+        "id": "2",
+        "name": "Publishing House Co.",
+        "contactInfo": "sales@publishco.com",
+        "address": "456 Book Street, New York, NY"
+      },
+      "user": {
+        "name": "Current User"
+      },
+      "quantity": 9,
+      "description": "dsf",
+      "note": "sdf",
+      "transactionType": "PURCHASE",
+      "status": "COMPLETED",
+      "totalProducts": 9,
+      "totalPrice": 179.91,
+      "createdAt": "2025-09-15T19:38:04.319Z",
+      "id": "BEZUXBx"
+    },
+    {
+      "product": {
+        "id": "103",
+        "name": "Men's T-Shirt",
+        "sku": "TS-303-BLU",
+        "price": 19.99,
+        "stockQuantity": 200,
+        "categoryId": 3,
+        "description": "100% cotton t-shirt.",
+        "imageUrl": "https://placehold.co/600x400/EEE/31343C?text=T-Shirt"
+      },
+      "supplier": {
+        "id": "1",
+        "name": "Electro World Inc.",
+        "contactInfo": "contact@electroworld.com",
+        "address": "123 Tech Avenue, Silicon Valley, CA"
+      },
+      "user": {
+        "name": "Current User"
+      },
+      "quantity": 7,
+      "description": "sfg",
+      "note": "dfg",
+      "transactionType": "PURCHASE",
+      "status": "COMPLETED",
+      "totalProducts": 7,
+      "totalPrice": 139.92999999999998,
+      "createdAt": "2025-09-15T19:39:47.396Z",
+      "id": "tZQZLr-"
+    }
+  ],
+  "current_user": {
+    "id": "1",
+    "name": "Admin User",
+    "email": "dwivedi@gmail.com",
+    "password": "12345",
+    "phoneNumber": "123-456-7890",
+    "role": "ADMIN"
+  }
+}

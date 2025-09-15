@@ -1,0 +1,6 @@
+{
+  "port": 5050,
+  "host": "localhost",
+  "watch": true,
+  "routes": "routes.json"
+}
