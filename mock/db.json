@@ -628,13 +628,6 @@
       "createdAt": "2025-09-15T19:39:47.396Z",
       "id": "tZQZLr-"
     }
-  ],
-  "current_user": {
-    "id": "1",
-    "name": "Admin User",
-    "email": "dwivedi@gmail.com",
-    "password": "12345",
-    "phoneNumber": "123-456-7890",
-    "role": "ADMIN"
-  }
+  ]
+  
 }

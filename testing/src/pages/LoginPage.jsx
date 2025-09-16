@@ -10,32 +10,29 @@ const LoginPage = () => {
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
-    e.preventDefault();
-    try {
-      const allUsers = await ApiService.getAllUsers();
+  e.preventDefault();
+  try {
+    const allUsers = await ApiService.getAllUsers();
+    const foundUser = allUsers.find(
+      (user) => user.email === email && user.password === password
+    );
 
-      const foundUser = allUsers.find(
-        (user) => user.email === email && user.password === password
-      );
+    if (foundUser) {
+      // CORRECTED: Save the user's ID, token, and role locally
+      ApiService.saveUserId(foundUser.id); 
+      ApiService.saveToken("mock-jwt-token-" + foundUser.email);
+      ApiService.saveRole(foundUser.role);
 
-      if (foundUser) {
-        // NEW STEP: Update the current_user on the server
-        await ApiService.setCurrentUser(foundUser);
-
-        // Save token and role locally for navigation
-        ApiService.saveToken("mock-jwt-token-" + foundUser.email);
-        ApiService.saveRole(foundUser.role);
-        
-        showMessage("Login successful!");
-        navigate("/dashboard");
-      } else {
-        showMessage("Invalid email or password.");
-      }
-    } catch (error) {
-      showMessage("An error occurred during login. Is the mock server running?");
-      console.error(error);
+      showMessage("Login successful!");
+      navigate("/dashboard");
+    } else {
+      showMessage("Invalid email or password.");
     }
-  };
+  } catch (error) {
+    showMessage("An error occurred during login. Is the mock server running?");
+    console.error(error);
+  }
+};
 
   const showMessage = (msg) => {
     setMessage(msg);

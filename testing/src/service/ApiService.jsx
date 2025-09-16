@@ -14,6 +14,15 @@ export default class ApiService {
     const bytes = CryptoJS.AES.decrypt(data, this.ENCRYPTION_KEY);
     return JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
   }
+  static saveUserId(userId) {
+  localStorage.setItem("userId", this.encrypt(userId));
+}
+
+static getUserId() {
+  const encryptedUserId = localStorage.getItem("userId");
+  if (!encryptedUserId) return null;
+  return this.decrypt(encryptedUserId);
+}
 
   static saveToken(token) {
     localStorage.setItem("token", this.encrypt(token));
@@ -36,9 +45,10 @@ export default class ApiService {
   }
 
   static clearAuth() {
-    localStorage.removeItem("token");
-    localStorage.removeItem("role");
-  }
+  localStorage.removeItem("token");
+  localStorage.removeItem("role");
+  localStorage.removeItem("userId"); // Add this line
+}
 
   static getHeader() {
     const token = this.getToken();
@@ -68,12 +78,17 @@ export default class ApiService {
     return response.data;
   }
 
-  static async getLoggedInUsesInfo() {
-    const response = await axios.get(`${this.BASE_URL}/users/current`, {
-      headers: this.getHeader(),
-    });
-    return response.data;
-  }
+  
+static async getLoggedInUsesInfo() {
+  const userId = this.getUserId(); // Get the ID from localStorage
+  if (!userId) return null; // If no user is logged in, return null
+
+  // Fetch the specific user by their ID
+  const response = await axios.get(`${this.BASE_URL}/users/${userId}`, {
+    headers: this.getHeader(),
+  });
+  return response.data;
+}
   
   static async getUserById(userId) {
     const response = await axios.get(`${this.BASE_URL}/users/${userId}`, {
