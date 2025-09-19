@@ -22,24 +22,23 @@ const DashboardPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Get the transaction array directly from the API service
+        // The service now returns the full axios response
         const transactionsArray = await ApiService.getAllTransactions();
 
-        // Transform the array and update the state
+        // CORRECTED: You need to use 'response.data' to get the array
         setTransactionData(
           transformTransactionData(
-            transactionsArray, // Use the array directly
+            transactionsArray, 
             selectedMonth,
             selectedYear
           )
         );
       } catch (error) {
         showMessage(
-          error.response?.data?.message || "Error getting transactions: " + error
+          error.response?.data?.message || "Error getting transactions."
         );
       }
     };
-    
     fetchData();
   }, [selectedMonth, selectedYear, selectedData]);
 

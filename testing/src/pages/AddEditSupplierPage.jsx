@@ -19,16 +19,19 @@ const AddEditSupplierPage = () => {
 
       const fetchSupplier = async () => {
         try {
+          // ApiService returns the supplier object directly
           const supplierData = await ApiService.getSupplierById(supplierId);
-          if (supplierData.status === 200) {
-            setName(supplierData.supplier.name);
-            setContactInfo(supplierData.supplier.contactInfo);
-            setAddress(supplierData.supplier.address);
+          
+          if (supplierData) {
+            // Use the data directly, without .status or .supplier
+            setName(supplierData.name);
+            setContactInfo(supplierData.contactInfo);
+            setAddress(supplierData.address);
           }
         } catch (error) {
           showMessage(
             error.response?.data?.message ||
-              "Error Getting a SUpplier by Id: " + error
+              "Error getting supplier details."
           );
         }
       };

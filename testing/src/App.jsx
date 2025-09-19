@@ -14,8 +14,10 @@ import TransactionsPage from "./pages/TransactionsPage";
 import TransactionDetailsPage from "./pages/TransactionDetailsPage";
 import ProfilePage from "./pages/ProfilePage";
 import DashboardPage from "./pages/DashboardPage";
-
+import ApiService from "./service/ApiService";
+import { useEffect } from "react";
 function App() {
+
   return (
     <Router>
       <Routes>

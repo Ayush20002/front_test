@@ -9,7 +9,7 @@ const ProfilePage = () => {
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
-        const userInfo = await ApiService.getLoggedInUsesInfo();
+        const userInfo = await ApiService.getLoggedInUserInfo();
         setUser(userInfo);
       } catch (error) {
         showMessage(
