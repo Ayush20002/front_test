@@ -4,7 +4,7 @@ import ApiService from "../service/ApiService";
 import { useNavigate, useParams } from "react-router-dom";
 
 const AddEditSupplierPage = () => {
-  const { supplierId } = useParams("");
+  const { supplierId } = useParams();
   const [name, setName] = useState("");
   const [contactInfo, setContactInfo] = useState("");
   const [address, setAddress] = useState("");
@@ -19,27 +19,20 @@ const AddEditSupplierPage = () => {
 
       const fetchSupplier = async () => {
         try {
-          // ApiService returns the supplier object directly
           const supplierData = await ApiService.getSupplierById(supplierId);
-          
           if (supplierData) {
-            // Use the data directly, without .status or .supplier
             setName(supplierData.name);
             setContactInfo(supplierData.contactInfo);
             setAddress(supplierData.address);
           }
         } catch (error) {
-          showMessage(
-            error.response?.data?.message ||
-              "Error getting supplier details."
-          );
+          showMessage("Error getting supplier details.");
         }
       };
       fetchSupplier();
     }
   }, [supplierId]);
 
-  //handle form submission for both add and edit supplier
   const handleSubmit = async (e) => {
     e.preventDefault();
     const supplierData = { name, contactInfo, address };
@@ -47,22 +40,18 @@ const AddEditSupplierPage = () => {
     try {
       if (isEditing) {
         await ApiService.updateSupplier(supplierId, supplierData);
-        showMessage("Supplier Edited succesfully");
-        navigate("/supplier")
+        showMessage("Supplier successfully updated");
       } else {
-        await ApiService.addSupplier(supplierData);
-        showMessage("Supplier Added succesfully");
-        navigate("/supplier")
+        // CORRECTED: Method name changed for consistency
+        await ApiService.createSupplier(supplierData);
+        showMessage("Supplier successfully added");
       }
+      navigate("/supplier");
     } catch (error) {
-      showMessage(
-        error.response?.data?.message ||
-          "Error Getting a SUpplier by Id: " + error
-      );
+      showMessage(error.response?.data?.message || "Error saving supplier.");
     }
   };
 
-  //metjhod to show message or errors
   const showMessage = (msg) => {
     setMessage(msg);
     setTimeout(() => {
@@ -107,11 +96,12 @@ const AddEditSupplierPage = () => {
             />
           </div>
           <button type="submit">
-            {isEditing ? "Edit Supplier" : "Add Supplier"}
+            {isEditing ? "Update Supplier" : "Add Supplier"}
           </button>
         </form>
       </div>
     </Layout>
   );
 };
+
 export default AddEditSupplierPage;

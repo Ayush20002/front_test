@@ -1,0 +1,37 @@
+[RegisterPage] --(new user created as Manager)--> [LoginPage]
+[LoginPage] --(credentials verified)--> [Backend returns JWT + user details]
+--> [DashboardPage]
+
+[DashboardPage] --> [Layout (Sidebar + Content)]
+      |
+      +-- If Manager --> (Dashboard, SellPage, PurchasePage, TransactionsPage)
+      |
+      +-- If Admin   --> (All Manager pages + CategoryPage, SupplierPage, ProductPage)
+
+-------------------------------------------------------
+Core Operations (Manager/Admin)
+-------------------------------------------------------
+SellPage ------> Create SELL Transaction
+PurchasePage --> Create PURCHASE Transaction
+
+-------------------------------------------------------
+Admin Setup (exclusive to Admin)
+-------------------------------------------------------
+CategoryPage --> Add/Edit/Delete Categories
+SupplierPage --> Add/Edit/Delete Suppliers
+ProductPage  --> Add/Edit/Delete Products
+              --> [AddEditProductPage]
+
+-------------------------------------------------------
+Transactions
+-------------------------------------------------------
+TransactionsPage --> Paginated table + Search
+                  --> [TransactionDetailsPage]
+                           |
+                           +-- View full details
+                           +-- Update Status (Pending → Completed)
+
+-------------------------------------------------------
+Session End
+-------------------------------------------------------
+[Logout] --> Clear JWT + user data --> Redirect to LoginPage

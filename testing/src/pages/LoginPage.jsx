@@ -15,18 +15,20 @@ const LoginPage = () => {
       const loginData = { email, password };
       const response = await ApiService.loginUser(loginData);
 
-      // We access .token and .user directly from the response
-      localStorage.setItem('jwt', response.token);
-      localStorage.setItem('user', JSON.stringify(response.user));
+      // CORRECTED: Separate the 'jwt' from the rest of the user data
+      const { jwt, ...user } = response;
+
+      // Save the token and the user object to localStorage
+      localStorage.setItem('jwt', jwt);
+      localStorage.setItem('user', JSON.stringify(user));
       
       showMessage("Login successful!");
       navigate("/dashboard");
       
     } catch (error) {
       showMessage(
-        error.response?.data?.error || "Invalid email or password."
+        error.response?.data?.message || "Invalid email or password."
       );
-      console.error(error);
     }
   };
 

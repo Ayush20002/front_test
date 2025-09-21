@@ -6,28 +6,27 @@ const RegisterPage = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  // Re-added phoneNumber state
   const [phoneNumber, setPhoneNumber] = useState("");
   const [message, setMessage] = useState("");
-
   const navigate = useNavigate();
 
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      // Create the user data object, including the hardcoded role
+      // Re-added phoneNumber to the data sent to the API
       const registerData = {
         name,
         email,
         password,
         phoneNumber,
-        role: "MANAGER", // Automatically assign the MANAGER role
+        role: "MANAGER",
       };
       
-      await ApiService.registerUser(registerData);
+      await ApiService.createUser(registerData);
       
       showMessage("Registration successful! Redirecting to login...");
 
-      // Navigate to the login page after a short delay
       setTimeout(() => {
         navigate("/login");
       }, 2000);
@@ -36,7 +35,6 @@ const RegisterPage = () => {
       showMessage(
         error.response?.data?.message || "Error registering user."
       );
-      console.error(error);
     }
   };
 
@@ -78,6 +76,7 @@ const RegisterPage = () => {
           required
         />
 
+        {/* Re-added the input field for Phone Number */}
         <input
           type="text"
           placeholder="Phone Number"

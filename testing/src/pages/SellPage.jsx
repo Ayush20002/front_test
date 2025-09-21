@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Layout from "../component/Layout";
 import ApiService from "../service/ApiService";
+import { useNavigate } from "react-router-dom";
 
 const SellPage = () => {
   const [products, setProducts] = useState([]);
@@ -9,67 +10,44 @@ const SellPage = () => {
   const [note, setNote] = useState("");
   const [quantity, setQuantity] = useState("");
   const [message, setMessage] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const productData = await ApiService.getAllProducts();
-        
-        // CORRECTED: Use the array directly
         setProducts(productData);
-
       } catch (error) {
-        showMessage(
-          error.response?.data?.message || "Error getting products."
-        );
+        showMessage("Error getting products.");
       }
     };
-
     fetchProducts();
   }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const user = JSON.parse(localStorage.getItem('user'));
 
-    if (!productId || !quantity) {
-      showMessage("Please fill in all required fields");
+    if (!productId || !quantity || !user) {
+      showMessage("Please fill in all required fields.");
       return;
     }
 
-    const selectedProduct = products.find(p => p.id == productId);
-
-    if (!selectedProduct) {
-      showMessage("Selected product not found.");
-      return;
-    }
-
-    const calculatedTotalPrice = selectedProduct.price * parseInt(quantity, 10);
-
+    // CORRECTED: Send a "flat" object with IDs, as the new backend requires
     const body = {
-      // --- Start of Changes ---
-      product: selectedProduct, // Instead of productId, save the whole object
-      user: { name: "Current User" }, // Add a mock user object for consistency
-      // --- End of Changes ---
-      
+      productId: parseInt(productId, 10),
+      userId: user.id, // Get the logged-in user's ID
       quantity: parseInt(quantity, 10),
       description: description || "Product sale",
       note: note || "",
-      transactionType: "SELL",
-      status: "COMPLETED",
-      totalProducts: parseInt(quantity, 10),
-      totalPrice: calculatedTotalPrice,
-      createdAt: new Date().toISOString(),
     };
 
     try {
-      // The ApiService call remains the same
       await ApiService.sellProduct(body);
       showMessage("Product sold successfully!");
       resetForm();
     } catch (error) {
-      showMessage(
-        error.response?.data?.message || "Error Selling Product: " + error
-      );
+      showMessage(error.response?.data?.message || "Error selling product.");
     }
   };
 
@@ -80,7 +58,6 @@ const SellPage = () => {
     setQuantity("");
   };
 
-  //metjhod to show message or errors
   const showMessage = (msg) => {
     setMessage(msg);
     setTimeout(() => {
@@ -96,7 +73,6 @@ const SellPage = () => {
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label>Select product</label>
-
             <select
               value={productId}
               onChange={(e) => setProductId(e.target.value)}
@@ -110,7 +86,6 @@ const SellPage = () => {
               ))}
             </select>
           </div>
-
 
           <div className="form-group">
             <label>Quantity</label>
@@ -128,7 +103,6 @@ const SellPage = () => {
               type="text"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              required
             />
           </div>
 
@@ -138,10 +112,8 @@ const SellPage = () => {
               type="text"
               value={note}
               onChange={(e) => setNote(e.target.value)}
-              required
             />
           </div>
-
 
           <button type="submit">Sell Product</button>
         </form>
@@ -149,4 +121,5 @@ const SellPage = () => {
     </Layout>
   );
 };
+
 export default SellPage;

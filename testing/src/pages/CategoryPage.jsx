@@ -9,89 +9,75 @@ const CategoryPage = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [editingCategoryId, setEditingCategoryId] = useState(null);
 
-  //fetcg the categories form our backend
+  // 1. Created a reusable function to fetch categories
+  const getCategories = async () => {
+    try {
+      const response = await ApiService.getAllCategories();
+      setCategories(response);
+    } catch (error) {
+      showMessage(error.response?.data?.message || "Error getting categories.");
+    }
+  };
 
+  // 2. useEffect now calls our reusable function
   useEffect(() => {
-    const getCategories = async () => {
-      try {
-        const response = await ApiService.getAllCategory();
-        
-        // CORRECTED: Use the array directly
-        setCategories(response);
-
-      } catch (error) {
-        showMessage(
-          error.response?.data?.message || "Error getting categories."
-        );
-      }
-    };
-    
     getCategories();
   }, []);
 
-  //add category
-  const addCategory = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     if (!categoryName) {
       showMessage("Category name cannot be empty");
       return;
     }
-    try {
-      await ApiService.createCategory({ name: categoryName });
-      showMessage("Category sucessfully added");
-      setCategoryName(""); //clear input
-      window.location.reload(); //relode page
-    } catch (error) {
-      showMessage(
-        error.response?.data?.message || "Error Loggin in a User: " + error
-      );
-    }
-  };
 
-  //Edit category
-  const editCategory = async () => {
     try {
-      await ApiService.updateCategory(editingCategoryId, {
-        name: categoryName,
-      });
-      showMessage("Category sucessfully Updated");
+      if (isEditing) {
+        await ApiService.updateCategory(editingCategoryId, { name: categoryName });
+        showMessage("Category successfully updated");
+      } else {
+        await ApiService.createCategory({ name: categoryName });
+        showMessage("Category successfully added");
+      }
+      // 3. Reset form and re-fetch the list instead of reloading the page
       setIsEditing(false);
-      setCategoryName(""); //clear input
-      window.location.reload(); //relode page
+      setEditingCategoryId(null);
+      setCategoryName("");
+      getCategories(); // Re-fetch the updated list
     } catch (error) {
-      showMessage(
-        error.response?.data?.message || "Error Loggin in a User: " + error
-      );
+      showMessage(error.response?.data?.message || "Error saving category.");
     }
   };
 
-  //populate the edit category data
-  const handleEditCategory = (category) => {
+  const handleEditClick = (category) => {
     setIsEditing(true);
     setEditingCategoryId(category.id);
     setCategoryName(category.name);
   };
+  
+  const handleCancelEdit = () => {
+    setIsEditing(false);
+    setEditingCategoryId(null);
+    setCategoryName("");
+  };
 
-  //delete category
   const handleDeleteCategory = async (categoryId) => {
     if (window.confirm("Are you sure you want to delete this category?")) {
       try {
         await ApiService.deleteCategory(categoryId);
-        showMessage("Category sucessfully Deleted");
-        window.location.reload(); //relode page
+        showMessage("Category successfully deleted");
+        getCategories(); // Re-fetch the updated list
       } catch (error) {
-        showMessage(
-          error.response?.data?.message || "Error Deleting in a Category: " + error
-        );
+        showMessage(error.response?.data?.message || "Error deleting category.");
       }
     }
   };
 
-  //metjhod to show message or errors
   const showMessage = (msg) => {
     setMessage(msg);
     setTimeout(() => {
       setMessage("");
-    }, 4000);
+    }, 3000);
   };
 
   return (
@@ -100,20 +86,17 @@ const CategoryPage = () => {
       <div className="category-page">
         <div className="category-header">
           <h1>Categories</h1>
-          <div className="add-cat">
+          {/* 4. The form now uses a single handleSubmit function */}
+          <form onSubmit={handleSubmit} className="add-cat">
             <input
               value={categoryName}
               type="text"
               placeholder="Category Name"
               onChange={(e) => setCategoryName(e.target.value)}
             />
-
-            {!isEditing ? (
-              <button onClick={addCategory}>Add Category</button>
-            ) : (
-              <button onClick={editCategory}>Edit Cateogry</button>
-            )}
-          </div>
+            <button type="submit">{isEditing ? "Update Category" : "Add Category"}</button>
+            {isEditing && <button type="button" onClick={handleCancelEdit}>Cancel</button>}
+          </form>
         </div>
 
         {categories && (
@@ -121,14 +104,9 @@ const CategoryPage = () => {
             {categories.map((category) => (
               <li className="category-item" key={category.id}>
                 <span>{category.name}</span>
-
                 <div className="category-actions">
-                  <button onClick={() => handleEditCategory(category)}>
-                    Edit
-                  </button>
-                  <button onClick={() => handleDeleteCategory(category.id)}>
-                    Edlete
-                  </button>
+                  <button onClick={() => handleEditClick(category)}>Edit</button>
+                  <button onClick={() => handleDeleteCategory(category.id)}>Delete</button>
                 </div>
               </li>
             ))}

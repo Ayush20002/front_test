@@ -1,88 +1,72 @@
 import React, { useState, useEffect } from "react";
 import Layout from "../component/Layout";
 import ApiService from "../service/ApiService";
+import { useNavigate } from "react-router-dom";
 
 const PurchasePage = () => {
   const [products, setProducts] = useState([]);
   const [suppliers, setSuppliers] = useState([]);
   const [productId, setProductId] = useState("");
-  const [supplierId, setSuppplierId] = useState("");
+  const [supplierId, setSupplierId] = useState("");
   const [description, setDescription] = useState("");
   const [note, setNote] = useState("");
   const [quantity, setQuantity] = useState("");
   const [message, setMessage] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchproductsAndSuppliers = async () => {
+    const fetchProductsAndSuppliers = async () => {
       try {
         const productData = await ApiService.getAllProducts();
-           const supplierData = await ApiService.getAllSuppliers();
-           setProducts(productData);
-           setSuppliers(supplierData);
+        const supplierData = await ApiService.getAllSuppliers();
+        setProducts(productData);
+        setSuppliers(supplierData);
       } catch (error) {
-        showMessage(
-          error.response?.data?.message || "Error Getting Products: " + error
-        );
+        showMessage("Error getting products and suppliers.");
       }
     };
-
-    fetchproductsAndSuppliers();
+    fetchProductsAndSuppliers();
   }, []);
+
+  // Moved resetForm outside handleSubmit to be accessible
+  const resetForm = () => {
+    setProductId("");
+    setSupplierId("");
+    setDescription("");
+    setNote("");
+    setQuantity("");
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const user = JSON.parse(localStorage.getItem('user'));
 
-    if (!productId || !supplierId || !quantity) {
-      showMessage("Please fill in all required fields");
+    if (!productId || !supplierId || !quantity || !user) {
+      showMessage("Please fill in all required fields.");
       return;
     }
 
-    // CORRECTED: Use loose equality (==) to find items by ID
-    const selectedProduct = products.find(p => p.id == productId);
-    const selectedSupplier = suppliers.find(s => s.id == supplierId);
-
-    if (!selectedProduct || !selectedSupplier) {
-      showMessage("Selected product or supplier not found.");
-      return;
-    }
-
-    const calculatedTotalPrice = selectedProduct.price * parseInt(quantity, 10);
-
-    // CORRECTED: Build the full, nested transaction object
+    // CORRECTED: Send a "flat" object with IDs, as the new backend requires
     const body = {
-      product: selectedProduct,   // Embed the full product object
-      supplier: selectedSupplier, // Embed the full supplier object
-      user: { name: "Current User" }, // Add a mock user
+      productId: parseInt(productId, 10),
+      userId: user.id, // Get the logged-in user's ID
+      supplierId: parseInt(supplierId, 10),
       quantity: parseInt(quantity, 10),
       description: description || "Inventory purchase",
       note: note || "",
-      transactionType: "PURCHASE",
-      status: "COMPLETED",
-      totalProducts: parseInt(quantity, 10),
-      totalPrice: calculatedTotalPrice,
-      createdAt: new Date().toISOString(),
     };
 
     try {
       await ApiService.purchaseProduct(body);
       showMessage("Purchase successful!");
-      const resetForm = () => {
-    setProductId("");
-    setSuppplierId("");
-    setDescription("");
-    setNote("");
-    setQuantity("");
-  };
+      resetForm();
       // Optionally navigate away after success
       // navigate("/transaction"); 
     } catch (error) {
-      showMessage(
-        error.response?.data?.message || "Error Purchasing Product: " + error
-      );
+      showMessage(error.response?.data?.message || "Error creating purchase.");
     }
   };
 
-  //metjhod to show message or errors
   const showMessage = (msg) => {
     setMessage(msg);
     setTimeout(() => {
@@ -98,7 +82,6 @@ const PurchasePage = () => {
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label>Select product</label>
-
             <select
               value={productId}
               onChange={(e) => setProductId(e.target.value)}
@@ -115,10 +98,9 @@ const PurchasePage = () => {
 
           <div className="form-group">
             <label>Select Supplier</label>
-
             <select
               value={supplierId}
-              onChange={(e) => setSuppplierId(e.target.value)}
+              onChange={(e) => setSupplierId(e.target.value)}
               required
             >
               <option value="">Select a supplier</option>
@@ -136,7 +118,6 @@ const PurchasePage = () => {
               type="text"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              required
             />
           </div>
 
@@ -146,7 +127,6 @@ const PurchasePage = () => {
               type="text"
               value={note}
               onChange={(e) => setNote(e.target.value)}
-              required
             />
           </div>
 
@@ -166,4 +146,5 @@ const PurchasePage = () => {
     </Layout>
   );
 };
+
 export default PurchasePage;

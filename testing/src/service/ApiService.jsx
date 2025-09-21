@@ -1,15 +1,14 @@
 import axios from 'axios';
-import CryptoJS from 'crypto-js';
 
 export default class ApiService {
+  // 1. A single, configured Axios instance
   static api = axios.create({
-    baseURL: 'http://localhost:5050/api',
+    baseURL: 'http://localhost:3000/api/v1',
   });
 
-  static ENCRYPTION_KEY = "phegon-dev-inventory";
-
+  // 2. The init() method to set up interceptors
   static init() {
-    // Request Interceptor (no changes here)
+    // Request Interceptor: Attaches the JWT to every request
     this.api.interceptors.request.use((config) => {
       const token = localStorage.getItem('jwt'); 
       if (token) {
@@ -18,21 +17,10 @@ export default class ApiService {
       return config;
     });
 
-    // Response Interceptor with DEBUG LOGS
+    // Response Interceptor: Automatically extracts data or handles auth errors
     this.api.interceptors.response.use(
-      (response) => {
-        // LOG 1: See the full response object from Axios
-        console.log("Interceptor received SUCCESSFUL response:", response); 
-
-        // LOG 2: See what we are about to return to the component
-        console.log("Interceptor is returning:", response.data); 
-
-        return response.data; 
-      },
+      (response) => response.data,
       (error) => {
-        // LOG 3: See any errors that the interceptor catches
-        console.error("Interceptor caught an ERROR:", error);
-        
         if (error.response?.status === 401) {
           this.clearAuth();
           window.location.href = '/login';
@@ -42,7 +30,7 @@ export default class ApiService {
     );
   }
 
-  // --- Local Storage and Auth Checkers ---
+  // --- Authentication Checkers ---
   static clearAuth() {
     localStorage.removeItem("jwt");
     localStorage.removeItem("user");
@@ -63,24 +51,38 @@ export default class ApiService {
   }
 
   // --- API Methods ---
+  
+  // Authentication
   static async loginUser(loginData) {
-    return this.api.post('/login', loginData);
+    return this.api.post('/auth/login', loginData);
   }
-
-  static async registerUser(registerData) {
-    return this.api.post('/users', registerData);
-  }
-
-  static async getAllUsers() {
-    return this.api.get('/users');
-  }
-
-  static async getLoggedInUserInfo() {
+static async getLoggedInUserInfo() {
     const user = JSON.parse(localStorage.getItem('user'));
     if (!user || !user.id) return null;
     return this.api.get(`/users/${user.id}`);
   }
+  // Users
+  static async getAllUsers() {
+    return this.api.get('/users');
+  }
 
+  static async getUserById(userId) {
+    return this.api.get(`/users/${userId}`);
+  }
+
+  static async createUser(userData) {
+    return this.api.post('/users', userData);
+  }
+
+  static async updateUser(userId, userData) {
+    return this.api.patch(`/users/${userId}`, userData);
+  }
+
+  static async deleteUser(userId) {
+    return this.api.delete(`/users/${userId}`);
+  }
+
+  // Products
   static async getAllProducts() {
     return this.api.get('/products');
   }
@@ -88,69 +90,86 @@ export default class ApiService {
   static async getProductById(productId) {
     return this.api.get(`/products/${productId}`);
   }
+
+  static async searchProductsByModel(model) {
+    return this.api.get('/products/search', { params: { model } });
+  }
   
-  static async addProduct(productData) {
+  static async createProduct(productData) {
     return this.api.post('/products', productData);
   }
   
   static async updateProduct(productId, productData) {
-    return this.api.put(`/products/${productId}`, productData);
+    return this.api.patch(`/products/${productId}`, productData);
   }
 
   static async deleteProduct(productId) {
     return this.api.delete(`/products/${productId}`);
   }
 
-  static async getAllCategory() {
+  // Categories
+  static async getAllCategories() {
     return this.api.get('/categories');
   }
+  
+  static async getCategoryById(categoryId) {
+    return this.api.get(`/categories/${categoryId}`);
+  }
 
-  static async createCategory(category) {
-    return this.api.post('/categories', category);
+  static async createCategory(categoryData) {
+    return this.api.post('/categories', categoryData);
   }
 
   static async updateCategory(categoryId, categoryData) {
-    return this.api.put(`/categories/${categoryId}`, categoryData);
+    return this.api.patch(`/categories/${categoryId}`, categoryData);
   }
 
   static async deleteCategory(categoryId) {
     return this.api.delete(`/categories/${categoryId}`);
   }
 
+  // Suppliers
   static async getAllSuppliers() {
     return this.api.get('/suppliers');
   }
+  
+  static async getSupplierById(supplierId) {
+    return this.api.get(`/suppliers/${supplierId}`);
+  }
 
-  static async addSupplier(supplierData) {
+  static async createSupplier(supplierData) {
     return this.api.post('/suppliers', supplierData);
   }
 
   static async updateSupplier(supplierId, supplierData) {
-    return this.api.put(`/suppliers/${supplierId}`, supplierData);
+    return this.api.patch(`/suppliers/${supplierId}`, supplierData);
   }
 
   static async deleteSupplier(supplierId) {
     return this.api.delete(`/suppliers/${supplierId}`);
   }
 
-  static async getAllTransactions(filter) {
-    return this.api.get('/transactions', { params: { q: filter } });
+  // Transactions
+  static async getAllTransactions() {
+    return this.api.get('/transactions');
   }
-  
+
   static async getTransactionById(transactionId) {
     return this.api.get(`/transactions/${transactionId}`);
   }
-
-  static async sellProduct(body) {
-    return this.api.post('/transactions/sell', body);
+  
+  static async sellProduct(transactionData) {
+    return this.api.post('/transactions/sell', transactionData);
   }
   
-  static async purchaseProduct(body) {
-    return this.api.post('/transactions/purchase', body);
+  static async purchaseProduct(transactionData) {
+    return this.api.post('/transactions/purchase', transactionData);
   }
 
-  static async updateTransactionStatus(transactionId, status) {
-    return this.api.patch(`/transactions/${transactionId}`, { status });
+  static async updateTransaction(transactionId, transactionData) {
+    return this.api.patch(`/transactions/${transactionId}`, transactionData);
   }
 }
+
+// Self-initialize the service
 ApiService.init();
