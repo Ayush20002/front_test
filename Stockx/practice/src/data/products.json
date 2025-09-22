@@ -1,0 +1,52 @@
+{
+  "products": [
+    {
+      "id": "103",
+      "name": "Men's T-Shirt",
+      "sku": "TS-303-BLU",
+      "price": 19.99,
+      "stockQuantity": 200,
+      "categoryId": 3,
+      "description": "100% cotton t-shirt.",
+      "imageUrl": "https://placehold.co/600x400/EEE/31343C?text=T-Shirt"
+    },
+    {
+      "id": "105",
+      "name": "Coffee Maker",
+      "sku": "CM-405-BLK",
+      "price": 89.99,
+      "stockQuantity": 59,
+      "categoryId": 4,
+      "description": "12-cup programmable coffee maker.",
+      "imageUrl": "https://placehold.co/600x400/EEE/31343C?text=Coffee+Maker"
+    },
+    {
+      "id": "106",
+      "name": "Women's Jeans",
+      "sku": "JN-306-DNM",
+      "price": 59.95,
+      "stockQuantity": 150,
+      "categoryId": 3,
+      "description": "High-waisted skinny jeans.",
+      "imageUrl": "https://placehold.co/600x400/EEE/31343C?text=Jeans"
+    },
+    {
+      "id": "109",
+      "name": "Air Fryer",
+      "sku": "AF-409-SLV",
+      "price": 120,
+      "stockQuantity": 90,
+      "categoryId": 4,
+      "description": "5.8-quart electric air fryer.",
+      "imageUrl": "https://placehold.co/600x400/EEE/31343C?text=Air+Fryer"
+    },
+    {
+      "name": "fa",
+      "sku": "adf",
+      "price": 323,
+      "stockQuantity": 3,
+      "description": "adf",
+      "id": "5"
+    }
+  ]
+}

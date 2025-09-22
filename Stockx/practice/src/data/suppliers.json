@@ -1,0 +1,34 @@
+{
+  "suppliers": [
+    {
+      "id": "2",
+      "name": "Publishing House Co.",
+      "contactInfo": "sales@publishco.com",
+      "address": "456 Book Street, New York, NY"
+    },
+    {
+      "id": "3",
+      "name": "Fashion Forward Ltd.",
+      "contactInfo": "support@fashionltd.com",
+      "address": "789 Style Road, Los Angeles, CA"
+    },
+    {
+      "name": "lsg",
+      "contactInfo": "2525",
+      "address": "cnghn",
+      "id": "1ae5"
+    },
+    {
+      "name": "fdsg",
+      "contactInfo": "7e567",
+      "address": "sfgs",
+      "id": "g03uHG6"
+    },
+    {
+      "name": "fgs",
+      "contactInfo": "455",
+      "address": "fdgs",
+      "id": "5"
+    }
+  ]
+}

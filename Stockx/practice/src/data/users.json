@@ -1,0 +1,60 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "name": "Admin User",
+      "email": "dwivedi@gmail.com",
+      "password": "12345",
+      "phoneNumber": "123-456-7890",
+      "role": "ADMIN"
+    },
+    {
+      "id": "2",
+      "name": "Jane Doe",
+      "email": "jane.doe@example.com",
+      "password": "password123",
+      "phoneNumber": "098-765-4321",
+      "role": "USER"
+    },
+    {
+      "id": "3",
+      "name": "Manager Mike",
+      "email": "manager@example.com",
+      "password": "managerpassword",
+      "phoneNumber": "555-555-5555",
+      "role": "MANAGER"
+    },
+    {
+      "name": "vishu",
+      "email": "ayush@gmail.com",
+      "password": "12345",
+      "phoneNumber": "23424",
+      "role": "MANAGER",
+      "id": "6oq971o"
+    },
+    {
+      "name": "dasf",
+      "email": "tapesh@gmail.com",
+      "password": "12345",
+      "phoneNumber": "324234",
+      "role": "MANAGER",
+      "id": "QMokeCD"
+    },
+    {
+      "name": "dasf",
+      "email": "tapesh@gmail.com",
+      "password": "12345",
+      "phoneNumber": "324234",
+      "role": "MANAGER",
+      "id": "Bogi9X1"
+    },
+    {
+      "name": "Vishal",
+      "email": "Vishal@gmail.com",
+      "password": "12345",
+      "phoneNumber": "65656",
+      "role": "MANAGER",
+      "id": "7"
+    }
+  ]
+}
