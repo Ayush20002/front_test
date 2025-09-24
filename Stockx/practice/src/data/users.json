@@ -63,6 +63,46 @@
       "password": "a-strong-password",
       "phoneNumber": "123-456-7890",
       "role": "MANAGER"
+    },
+    {
+      "id": "1758731162289-37",
+      "name": "asdfas",
+      "email": "vinayak@gmail.com",
+      "password": "hashed_12345_1758731162289",
+      "phoneNumber": "",
+      "role": "MANAGER"
+    },
+    {
+      "id": "1758731180607-975",
+      "name": "asdfas",
+      "email": "vinayaka@gmail.com",
+      "password": "hashed_12345_1758731180607",
+      "phoneNumber": "9546521569",
+      "role": "MANAGER"
+    },
+    {
+      "id": "1758731994693-432",
+      "name": "sdf",
+      "email": "Vishsal@gmail.com",
+      "password": "hashed_12345_1758731994693",
+      "phoneNumber": "98564633683",
+      "role": "MANAGER"
+    },
+    {
+      "id": "1758733820558-565",
+      "name": "asdfasd",
+      "email": "himanshu@gmail.com",
+      "password": "hashed_12345_1758733820558",
+      "phoneNumber": "9919039928",
+      "role": "MANAGER"
+    },
+    {
+      "id": "1758733935228-764",
+      "name": "sdfas",
+      "email": "himanshus@gmail.com",
+      "password": "hashed_99190399_1758733935228",
+      "phoneNumber": "9919039928",
+      "role": "MANAGER"
     }
   ]
 }

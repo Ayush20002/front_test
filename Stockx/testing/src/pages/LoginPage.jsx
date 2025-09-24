@@ -6,7 +6,6 @@ const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
-
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
@@ -15,14 +14,19 @@ const LoginPage = () => {
       const loginData = { email, password };
       const response = await ApiService.loginUser(loginData);
 
-      // CORRECTED: Separate the 'jwt' from the rest of the user data
+      // --- THIS IS THE CORRECTED LOGIC ---
+
+      // 1. Destructure the 'jwt' and user data from the response
       const { jwt, ...user } = response;
 
-      // Save the token and the user object to localStorage
-      localStorage.setItem('jwt', jwt);
+      // 2. Save them to localStorage using the correct 'token' key
+      localStorage.setItem('token', jwt);
       localStorage.setItem('user', JSON.stringify(user));
       
-      showMessage("Login successful!");
+      // 3. IMPORTANT: Immediately set the default auth header for all future requests
+      ApiService.api.defaults.headers.common['Authorization'] = `Bearer ${jwt}`;
+      
+      // 4. Now, navigate to the dashboard
       navigate("/dashboard");
       
     } catch (error) {
@@ -53,7 +57,6 @@ const LoginPage = () => {
           onChange={(e) => setEmail(e.target.value)}
           required
         />
-
         <input
           type="password"
           placeholder="Password"
@@ -61,7 +64,6 @@ const LoginPage = () => {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-
         <button type="submit">Login</button>
       </form>
       <p>

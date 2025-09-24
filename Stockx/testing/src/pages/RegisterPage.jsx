@@ -1,35 +1,43 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import ApiService from "../service/ApiService";
+import ApiService from "../service/ApiService"; // Assuming you have this service file
 
 const RegisterPage = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  // Re-added phoneNumber state
   const [phoneNumber, setPhoneNumber] = useState("");
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
   const handleRegister = async (e) => {
     e.preventDefault();
+
+    const phoneRegex = /^\d{10,15}$/;
+    if (phoneNumber && !phoneRegex.test(phoneNumber)) {
+      showMessage("Please enter a valid phone number (10-15 digits).");
+      return;
+    }
+
     try {
-      // Re-added phoneNumber to the data sent to the API
       const registerData = {
         name,
         email,
         password,
         phoneNumber,
-        role: "MANAGER",
       };
       
-      await ApiService.createUser(registerData);
+      const response = await ApiService.registerUser(registerData);
       
-      showMessage("Registration successful! Redirecting to login...");
+      // CORRECTED: The 'response' variable is the data object directly.
+      const { jwt, ...user } = response;
 
-      setTimeout(() => {
-        navigate("/login");
-      }, 2000);
+      // Save the token and user info to localStorage
+      localStorage.setItem("token", jwt);
+      localStorage.setItem("user", JSON.stringify(user));
+
+      // Navigate directly to the dashboard
+      navigate("/dashboard");
 
     } catch (error) {
       showMessage(
@@ -59,7 +67,6 @@ const RegisterPage = () => {
           onChange={(e) => setName(e.target.value)}
           required
         />
-
         <input
           type="email"
           placeholder="Email"
@@ -67,7 +74,6 @@ const RegisterPage = () => {
           onChange={(e) => setEmail(e.target.value)}
           required
         />
-
         <input
           type="password"
           placeholder="Password"
@@ -75,16 +81,13 @@ const RegisterPage = () => {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-
-        {/* Re-added the input field for Phone Number */}
         <input
           type="text"
           placeholder="Phone Number"
           value={phoneNumber}
           onChange={(e) => setPhoneNumber(e.target.value)}
-          required
+          
         />
-
         <button type="submit">Register</button>
       </form>
       <p>

@@ -44,13 +44,13 @@ const router = jsonServer.router(db, { id: 'id' });
 server.use(middlewares);
 server.use(jsonServer.bodyParser);
 
-// --- Custom Public Route for Login ---
+// --- Custom Public Routes (Login & Register) ---
 server.post(`${API_PREFIX}/auth/login`, (req, res) => {
   const { email, password } = req.body;
   const users = dbMap.users.get('users').value() || [];
-  // In a real app, you would compare the hashed password.
-  // This is simplified for the mock server.
-  const user = users.find(u => u.email === email && u.password.startsWith(`hashed_${password}_`));
+  const user = users.find(
+    u => u.email === email && (u.password === password || u.password.startsWith(`hashed_${password}_`))
+  );
   if (user) {
     const { password, ...userSafe } = user;
     res.jsonp({ ...userSafe, jwt: FAKE_JWT });
@@ -59,52 +59,39 @@ server.post(`${API_PREFIX}/auth/login`, (req, res) => {
   }
 });
 
-// --- Custom Public Route for Register ---
 server.post(`${API_PREFIX}/auth/register`, (req, res) => {
   const { name, email, password, phoneNumber } = req.body;
-
   if (!name || !email || !password) {
     return res.status(400).jsonp({ message: 'Name, email, and password are required.' });
   }
-  
-  // FIXED: Added phone number validation
   if (phoneNumber && !/^\d{10,15}$/.test(phoneNumber)) {
     return res.status(400).jsonp({ message: 'Phone number must be between 10 and 15 digits.' });
   }
 
   const usersDb = dbMap.users.get('users');
-  
-  const existingUser = usersDb.find({ email: email }).value();
+  const existingUser = usersDb.find({ email }).value();
   if (existingUser) {
     return res.status(409).jsonp({ message: 'An account with this email already exists.' });
   }
 
   const newUser = {
-    // FIXED: ID is now unique
     id: `${Date.now()}-${Math.floor(Math.random() * 1000)}`,
     name,
     email,
-    // FIXED: "Hashing" the password
     password: `hashed_${password}_${Date.now()}`,
-    phoneNumber: phoneNumber || "",
-    role: "MANAGER"
+    phoneNumber: phoneNumber || '',
+    role: 'MANAGER'
   };
 
   usersDb.push(newUser).write();
-  router.db.set('users', usersDb.value()); // Sync in-memory db
-
+  router.db.set('users', usersDb.value());
   const { password: _, ...userSafe } = newUser;
-
-  // FIXED: Register response now includes JWT
   return res.status(201).jsonp({ ...userSafe, jwt: FAKE_JWT });
 });
 
 // --- Universal Security Middleware ---
 server.use((req, res, next) => {
-  const publicRoutes = [
-    `${API_PREFIX}/auth/login`,
-    `${API_PREFIX}/auth/register`
-  ];
+  const publicRoutes = [`${API_PREFIX}/auth/login`, `${API_PREFIX}/auth/register`];
   if (publicRoutes.includes(req.path)) {
     next();
   } else {
@@ -129,7 +116,8 @@ server.use((req, res, next) => {
 
   if ((isSell || isPurchase) && req.method === 'POST') {
     const { productId, userId, supplierId, quantity, ...rest } = req.body;
-    const product = dbMap.products.get('products').find({ id: String(productId) }).value();
+    const productsDb = dbMap.products.get('products');
+    const product = productsDb.find({ id: String(productId) }).value();
     const user = dbMap.users.get('users').find({ id: String(userId) }).value();
     const supplier = supplierId ? dbMap.suppliers.get('suppliers').find({ id: String(supplierId) }).value() : null;
 
@@ -137,13 +125,24 @@ server.use((req, res, next) => {
       return res.status(404).jsonp({ error: 'Product, User, or Supplier not found' });
     }
 
+    // Check for sufficient stock before selling
+    if (isSell && product.stockQuantity < quantity) {
+      return res.status(400).jsonp({ message: `Not enough stock available. Only ${product.stockQuantity} left.` });
+    }
+
+    // Calculate and update the product's stock quantity
+    const newStockQuantity = isSell ? product.stockQuantity - quantity : product.stockQuantity + quantity;
+    productsDb.find({ id: String(productId) }).assign({ stockQuantity: newStockQuantity }).write();
+
     const { password, ...userSafe } = user;
     const transactionsDb = dbMap.transactions.get('transactions');
     const newTransaction = {
       id: `${Date.now()}-${Math.floor(Math.random() * 1000)}`,
       transactionType: isSell ? 'SELL' : 'PURCHASE',
       status: 'COMPLETED',
-      product, user: userSafe, supplier,
+      product,
+      user: userSafe,
+      supplier,
       totalProducts: quantity,
       totalPrice: product.price * quantity,
       createdAt: new Date().toISOString(),
@@ -151,7 +150,10 @@ server.use((req, res, next) => {
     };
 
     transactionsDb.push(newTransaction).write();
-    router.db.set('transactions', transactionsDb.value()); // FIXED: Removed redundant .write()
+    // Sync in-memory databases
+    router.db.set('transactions', transactionsDb.value());
+    router.db.set('products', productsDb.value());
+
     return res.status(201).jsonp(newTransaction);
   }
   next();
@@ -171,7 +173,7 @@ server.use((req, res, next) => {
   if (req.method === 'POST') {
     if (!data.id) data.id = `${Date.now()}-${Math.floor(Math.random() * 1000)}`;
     resourceChain.push(data).write();
-    router.db.set(resource, resourceChain.value()); // FIXED: Removed redundant .write()
+    router.db.set(resource, resourceChain.value());
     return res.status(201).jsonp(data);
   }
 
@@ -182,22 +184,22 @@ server.use((req, res, next) => {
   
   if (req.method === 'PATCH') {
     const updatedItem = item.assign(data).write();
-    router.db.set(resource, resourceChain.value()); // FIXED: Removed redundant .write()
+    router.db.set(resource, resourceChain.value());
     return res.jsonp(updatedItem);
   }
   if (req.method === 'PUT') {
     const replacedItem = item.assign({ ...data, id: String(id) }).write();
-    router.db.set(resource, resourceChain.value()); // FIXED: Removed redundant .write()
+    router.db.set(resource, resourceChain.value());
     return res.jsonp(replacedItem);
   }
   if (req.method === 'DELETE') {
     resourceChain.remove({ id: item.value().id }).write();
-    router.db.set(resource, resourceChain.value()); // FIXED: Removed redundant .write()
+    router.db.set(resource, resourceChain.value());
     return res.status(204).jsonp({});
   }
 });
 
-// --- Default Router (Now only handles GET requests) ---
+// --- Default Router ---
 server.use(API_PREFIX, router);
 
 // --- Server Start ---

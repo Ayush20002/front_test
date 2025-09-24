@@ -10,11 +10,11 @@ const AddEditProductPage = () => {
   const [price, setPrice] = useState("");
   const [stockQuantity, setStockQuantity] = useState("");
   const [description, setDescription] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
-  // useEffect now only fetches the product if we are in "edit" mode
   useEffect(() => {
     if (productId) {
       setIsEditing(true);
@@ -26,6 +26,7 @@ const AddEditProductPage = () => {
           setPrice(productData.price);
           setStockQuantity(productData.stockQuantity);
           setDescription(productData.description);
+          setImageUrl(productData.imageUrl || "");
         } catch (error) {
           showMessage("Error getting product details.");
         }
@@ -41,25 +42,36 @@ const AddEditProductPage = () => {
     }, 4000);
   };
 
+  // --- THIS IS THE NEW FUNCTION TO HANDLE FILE UPLOADS ---
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.readAsDataURL(file); // Converts the file to a Base64 string
+      reader.onloadend = () => {
+        // When the reader is done, set the string in our state
+        setImageUrl(reader.result);
+      };
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Create a simple product object that matches the new backend payload
     const productData = {
       name,
       sku,
       price: parseFloat(price),
       stockQuantity: parseInt(stockQuantity, 10),
       description,
+      imageUrl,
     };
 
     try {
       if (isEditing) {
-        // Use PATCH for updates as per the new spec
         await ApiService.updateProduct(productId, productData);
         showMessage("Product successfully updated");
       } else {
-        // Renamed for clarity to match the final ApiService
         await ApiService.createProduct(productData);
         showMessage("Product successfully saved");
       }
@@ -124,7 +136,42 @@ const AddEditProductPage = () => {
             />
           </div>
 
-          {/* Category and Image Upload fields are removed to match the new API */}
+          {/* --- THIS IS THE UPDATED JSX FOR THE IMAGE UPLOAD --- */}
+          <div className="form-group">
+            <label>Product Image</label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleFileChange}
+            />
+          </div>
+          
+          {imageUrl && (
+            <div className="form-group">
+              <label>Image Preview</label>
+              <div style={{
+                border: '1px solid #ddd',
+                borderRadius: '8px',
+                padding: '10px',
+                display: 'inline-block',
+                backgroundColor: '#f9f9f9'
+              }}>
+                <img 
+                  src={imageUrl} 
+                  alt="Product Preview" 
+                  style={{ 
+                    maxWidth: '200px', 
+                    maxHeight: '200px', 
+                    width: 'auto',
+                    height: 'auto',
+                    objectFit: 'contain',
+                    display: 'block',
+                    borderRadius: '4px'
+                  }} 
+                />
+              </div>
+            </div>
+          )}
           
           <button type="submit">
             {isEditing ? "Update Product" : "Add Product"}

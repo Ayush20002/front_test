@@ -3,7 +3,7 @@
     {
       "id": "1",
       "transactionType": "PURCHASE",
-      "status": "PENDING",
+      "status": "PROCESSING",
       "description": "Weekly restock of mice.",
       "note": "Invoice #INV-2025-001",
       "totalProducts": 5,
@@ -128,6 +128,95 @@
       "createdAt": "2025-09-21T11:19:25.050Z",
       "description": "asdf",
       "note": "bgfh"
+    },
+    {
+      "id": "1758730724845-171",
+      "transactionType": "SELL",
+      "status": "COMPLETED",
+      "product": {
+        "id": "103",
+        "name": "Men's T-Shirt",
+        "sku": "TS-303-BLU",
+        "price": 19.99,
+        "stockQuantity": 202,
+        "categoryId": 3,
+        "description": "100% cotton t-shirt.",
+        "imageUrl": "https://placehold.co/600x400/EEE/31343C?text=T-Shirt"
+      },
+      "user": {
+        "id": "1",
+        "name": "Admin User",
+        "email": "dwivedi@gmail.com",
+        "phoneNumber": "123-456-7890",
+        "role": "ADMIN"
+      },
+      "supplier": null,
+      "totalProducts": 5,
+      "totalPrice": 99.94999999999999,
+      "createdAt": "2025-09-24T16:18:44.845Z",
+      "description": "dsg",
+      "note": "sdfg"
+    },
+    {
+      "id": "1758730747174-600",
+      "transactionType": "PURCHASE",
+      "status": "COMPLETED",
+      "product": {
+        "id": "103",
+        "name": "Men's T-Shirt",
+        "sku": "TS-303-BLU",
+        "price": 19.99,
+        "stockQuantity": 202,
+        "categoryId": 3,
+        "description": "100% cotton t-shirt.",
+        "imageUrl": "https://placehold.co/600x400/EEE/31343C?text=T-Shirt"
+      },
+      "user": {
+        "id": "1",
+        "name": "Admin User",
+        "email": "dwivedi@gmail.com",
+        "phoneNumber": "123-456-7890",
+        "role": "ADMIN"
+      },
+      "supplier": {
+        "id": "2",
+        "name": "Publishing House Co.",
+        "contactInfo": "sales@publishco.com",
+        "address": "456 Book Street, New York, NY"
+      },
+      "totalProducts": 7,
+      "totalPrice": 139.92999999999998,
+      "createdAt": "2025-09-24T16:19:07.174Z",
+      "description": "sfg",
+      "note": "sfg"
+    },
+    {
+      "id": "1758731546617-953",
+      "transactionType": "SELL",
+      "status": "COMPLETED",
+      "product": {
+        "id": "106",
+        "name": "Women's Jeans",
+        "sku": "JN-306-DNM",
+        "price": 59.95,
+        "stockQuantity": 51,
+        "categoryId": 3,
+        "description": "High-waisted skinny jeans.",
+        "imageUrl": "https://placehold.co/600x400/EEE/31343C?text=Jeans"
+      },
+      "user": {
+        "id": "1",
+        "name": "Admin User",
+        "email": "dwivedi@gmail.com",
+        "phoneNumber": "123-456-7890",
+        "role": "ADMIN"
+      },
+      "supplier": null,
+      "totalProducts": 99,
+      "totalPrice": 5935.05,
+      "createdAt": "2025-09-24T16:32:26.617Z",
+      "description": "hjk",
+      "note": "jk"
     }
   ]
 }

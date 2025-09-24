@@ -10,7 +10,8 @@ export default class ApiService {
   static init() {
     // Request Interceptor: Attaches the JWT to every request
     this.api.interceptors.request.use((config) => {
-      const token = localStorage.getItem('jwt'); 
+      // FIXED: Using 'token' key for consistency with components
+      const token = localStorage.getItem('token'); 
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }
@@ -21,7 +22,7 @@ export default class ApiService {
     this.api.interceptors.response.use(
       (response) => response.data,
       (error) => {
-        if (error.response?.status === 401) {
+        if (error.response?.status === 401 || error.response?.status === 403) {
           this.clearAuth();
           window.location.href = '/login';
         }
@@ -32,12 +33,14 @@ export default class ApiService {
 
   // --- Authentication Checkers ---
   static clearAuth() {
-    localStorage.removeItem("jwt");
+    // FIXED: Using 'token' key
+    localStorage.removeItem("token");
     localStorage.removeItem("user");
   }
   
   static isAuthenticated() {
-    return !!localStorage.getItem('jwt');
+    // FIXED: Using 'token' key
+    return !!localStorage.getItem('token');
   }
 
   static isAdmin() {
@@ -56,11 +59,18 @@ export default class ApiService {
   static async loginUser(loginData) {
     return this.api.post('/auth/login', loginData);
   }
-static async getLoggedInUserInfo() {
+  
+  // ADDED: Method for public registration
+  static async registerUser(registerData) {
+    return this.api.post('/auth/register', registerData);
+  }
+
+  static async getLoggedInUserInfo() {
     const user = JSON.parse(localStorage.getItem('user'));
     if (!user || !user.id) return null;
     return this.api.get(`/users/${user.id}`);
   }
+
   // Users
   static async getAllUsers() {
     return this.api.get('/users');
