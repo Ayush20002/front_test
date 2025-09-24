@@ -103,6 +103,14 @@
       "password": "hashed_99190399_1758733935228",
       "phoneNumber": "9919039928",
       "role": "MANAGER"
+    },
+    {
+      "id": "1758739245154-509",
+      "name": "asdfa",
+      "email": "dfasdf@gmail.com",
+      "password": "hashed_12345_1758739245154",
+      "phoneNumber": "32432545534",
+      "role": "MANAGER"
     }
   ]
 }
