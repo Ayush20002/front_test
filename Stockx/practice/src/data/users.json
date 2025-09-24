@@ -55,6 +55,14 @@
       "phoneNumber": "65656",
       "role": "MANAGER",
       "id": "7"
+    },
+    {
+      "id": "8",
+      "name": "New Manager Name",
+      "email": "new.manager@example.com",
+      "password": "a-strong-password",
+      "phoneNumber": "123-456-7890",
+      "role": "MANAGER"
     }
   ]
 }

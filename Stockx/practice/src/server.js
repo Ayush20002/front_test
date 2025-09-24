@@ -48,7 +48,9 @@ server.use(jsonServer.bodyParser);
 server.post(`${API_PREFIX}/auth/login`, (req, res) => {
   const { email, password } = req.body;
   const users = dbMap.users.get('users').value() || [];
-  const user = users.find(u => u.email === email && u.password === password);
+  // In a real app, you would compare the hashed password.
+  // This is simplified for the mock server.
+  const user = users.find(u => u.email === email && u.password.startsWith(`hashed_${password}_`));
   if (user) {
     const { password, ...userSafe } = user;
     res.jsonp({ ...userSafe, jwt: FAKE_JWT });
@@ -57,9 +59,53 @@ server.post(`${API_PREFIX}/auth/login`, (req, res) => {
   }
 });
 
+// --- Custom Public Route for Register ---
+server.post(`${API_PREFIX}/auth/register`, (req, res) => {
+  const { name, email, password, phoneNumber } = req.body;
+
+  if (!name || !email || !password) {
+    return res.status(400).jsonp({ message: 'Name, email, and password are required.' });
+  }
+  
+  // FIXED: Added phone number validation
+  if (phoneNumber && !/^\d{10,15}$/.test(phoneNumber)) {
+    return res.status(400).jsonp({ message: 'Phone number must be between 10 and 15 digits.' });
+  }
+
+  const usersDb = dbMap.users.get('users');
+  
+  const existingUser = usersDb.find({ email: email }).value();
+  if (existingUser) {
+    return res.status(409).jsonp({ message: 'An account with this email already exists.' });
+  }
+
+  const newUser = {
+    // FIXED: ID is now unique
+    id: `${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+    name,
+    email,
+    // FIXED: "Hashing" the password
+    password: `hashed_${password}_${Date.now()}`,
+    phoneNumber: phoneNumber || "",
+    role: "MANAGER"
+  };
+
+  usersDb.push(newUser).write();
+  router.db.set('users', usersDb.value()); // Sync in-memory db
+
+  const { password: _, ...userSafe } = newUser;
+
+  // FIXED: Register response now includes JWT
+  return res.status(201).jsonp({ ...userSafe, jwt: FAKE_JWT });
+});
+
 // --- Universal Security Middleware ---
 server.use((req, res, next) => {
-  if (req.path === `${API_PREFIX}/auth/login`) {
+  const publicRoutes = [
+    `${API_PREFIX}/auth/login`,
+    `${API_PREFIX}/auth/register`
+  ];
+  if (publicRoutes.includes(req.path)) {
     next();
   } else {
     checkAuth(req, res, next);
@@ -67,7 +113,6 @@ server.use((req, res, next) => {
 });
 
 // --- Custom Protected Handlers ---
-// This custom handler for GET /users removes passwords from the response.
 server.get(`${API_PREFIX}/users`, (req, res) => {
   const users = dbMap.users.get('users').value() || [];
   const safeUsers = users.map(user => {
@@ -84,47 +129,37 @@ server.use((req, res, next) => {
 
   if ((isSell || isPurchase) && req.method === 'POST') {
     const { productId, userId, supplierId, quantity, ...rest } = req.body;
-
     const product = dbMap.products.get('products').find({ id: String(productId) }).value();
     const user = dbMap.users.get('users').find({ id: String(userId) }).value();
-    const supplier = supplierId
-      ? dbMap.suppliers.get('suppliers').find({ id: String(supplierId) }).value()
-      : null;
+    const supplier = supplierId ? dbMap.suppliers.get('suppliers').find({ id: String(supplierId) }).value() : null;
 
     if (!product || !user || (isPurchase && !supplier)) {
       return res.status(404).jsonp({ error: 'Product, User, or Supplier not found' });
     }
 
     const { password, ...userSafe } = user;
-
-    // ✅ Safely handle empty transactions
-    const transactions = router.db.get('transactions').value() || [];
+    const transactionsDb = dbMap.transactions.get('transactions');
     const newTransaction = {
-      id: String(transactions.length + 1),
+      id: `${Date.now()}-${Math.floor(Math.random() * 1000)}`,
       transactionType: isSell ? 'SELL' : 'PURCHASE',
       status: 'COMPLETED',
-      product,
-      user: userSafe,
-      supplier,
+      product, user: userSafe, supplier,
       totalProducts: quantity,
       totalPrice: product.price * quantity,
       createdAt: new Date().toISOString(),
       ...rest,
     };
 
-    dbMap.transactions.get('transactions').push(newTransaction).write();
-    router.db.set('transactions', dbMap.transactions.get('transactions').value()).write();
-
+    transactionsDb.push(newTransaction).write();
+    router.db.set('transactions', transactionsDb.value()); // FIXED: Removed redundant .write()
     return res.status(201).jsonp(newTransaction);
   }
-
   next();
 });
 
-// --- Generic Persistence Middleware (for all other write operations) ---
+// --- Generic Persistence Middleware ---
 server.use((req, res, next) => {
   const resource = req.path.replace(`${API_PREFIX}/`, '').split('/')[0];
-
   if (!dbMap[resource] || req.method === 'GET') {
     return next();
   }
@@ -134,33 +169,30 @@ server.use((req, res, next) => {
   const resourceChain = dbMap[resource].get(resource);
 
   if (req.method === 'POST') {
-    if (!data.id) data.id = String(resourceChain.value().length + 1);
+    if (!data.id) data.id = `${Date.now()}-${Math.floor(Math.random() * 1000)}`;
     resourceChain.push(data).write();
-    router.db.set(resource, resourceChain.value()).write();
+    router.db.set(resource, resourceChain.value()); // FIXED: Removed redundant .write()
     return res.status(201).jsonp(data);
   }
 
   const item = resourceChain.find({ id: String(id) });
-
   if (!item.value()) {
     return res.status(404).jsonp({ error: `${resource} with id ${id} not found` });
   }
-
+  
   if (req.method === 'PATCH') {
     const updatedItem = item.assign(data).write();
-    router.db.set(resource, resourceChain.value()).write();
+    router.db.set(resource, resourceChain.value()); // FIXED: Removed redundant .write()
     return res.jsonp(updatedItem);
   }
-
   if (req.method === 'PUT') {
     const replacedItem = item.assign({ ...data, id: String(id) }).write();
-    router.db.set(resource, resourceChain.value()).write();
+    router.db.set(resource, resourceChain.value()); // FIXED: Removed redundant .write()
     return res.jsonp(replacedItem);
   }
-
   if (req.method === 'DELETE') {
     resourceChain.remove({ id: item.value().id }).write();
-    router.db.set(resource, resourceChain.value()).write();
+    router.db.set(resource, resourceChain.value()); // FIXED: Removed redundant .write()
     return res.status(204).jsonp({});
   }
 });
