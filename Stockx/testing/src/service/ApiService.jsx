@@ -50,7 +50,8 @@ export default class ApiService {
 
   static isManager() {
     const user = JSON.parse(localStorage.getItem('user'));
-    return user?.role === "MANAGER";
+    // This line returns true if the role is "MANAGER" OR "ADMIN"
+    return user?.role === "MANAGER" || user?.role === "ADMIN";
   }
 
   // --- API Methods ---

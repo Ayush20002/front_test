@@ -151,6 +151,14 @@
       "password": "hashed_dfdfsas_1758827932625",
       "phoneNumber": "9586575853",
       "role": "MANAGER"
+    },
+    {
+      "id": "1758828902139-930",
+      "name": "sdf",
+      "email": "dfassdfdf@gmail.com",
+      "password": "hashed_12345_1758828902139",
+      "phoneNumber": "3543534544",
+      "role": "MANAGER"
     }
   ]
 }
