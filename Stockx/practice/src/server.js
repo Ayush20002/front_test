@@ -116,8 +116,7 @@ server.use((req, res, next) => {
 
   if ((isSell || isPurchase) && req.method === 'POST') {
     const { productId, userId, supplierId, quantity, ...rest } = req.body;
-    const productsDb = dbMap.products.get('products');
-    const product = productsDb.find({ id: String(productId) }).value();
+    const product = dbMap.products.get('products').find({ id: String(productId) }).value();
     const user = dbMap.users.get('users').find({ id: String(userId) }).value();
     const supplier = supplierId ? dbMap.suppliers.get('suppliers').find({ id: String(supplierId) }).value() : null;
 
@@ -125,21 +124,14 @@ server.use((req, res, next) => {
       return res.status(404).jsonp({ error: 'Product, User, or Supplier not found' });
     }
 
-    // Check for sufficient stock before selling
-    if (isSell && product.stockQuantity < quantity) {
-      return res.status(400).jsonp({ message: `Not enough stock available. Only ${product.stockQuantity} left.` });
-    }
-
-    // Calculate and update the product's stock quantity
-    const newStockQuantity = isSell ? product.stockQuantity - quantity : product.stockQuantity + quantity;
-    productsDb.find({ id: String(productId) }).assign({ stockQuantity: newStockQuantity }).write();
+    // REMOVED: All logic for updating stock quantity is gone from this block.
 
     const { password, ...userSafe } = user;
     const transactionsDb = dbMap.transactions.get('transactions');
     const newTransaction = {
       id: `${Date.now()}-${Math.floor(Math.random() * 1000)}`,
       transactionType: isSell ? 'SELL' : 'PURCHASE',
-      status: 'COMPLETED',
+      status: 'PENDING', // CHANGED: All new transactions are now PENDING
       product,
       user: userSafe,
       supplier,
@@ -150,26 +142,64 @@ server.use((req, res, next) => {
     };
 
     transactionsDb.push(newTransaction).write();
-    // Sync in-memory databases
     router.db.set('transactions', transactionsDb.value());
-    router.db.set('products', productsDb.value());
 
     return res.status(201).jsonp(newTransaction);
   }
   next();
 });
 
-// --- Generic Persistence Middleware ---
+// --- Generic Persistence Middleware (with Smart Transaction Updates) ---
 server.use((req, res, next) => {
   const resource = req.path.replace(`${API_PREFIX}/`, '').split('/')[0];
   if (!dbMap[resource] || req.method === 'GET') {
     return next();
   }
-
+  
   const id = req.path.split('/').pop();
   const data = req.body;
   const resourceChain = dbMap[resource].get(resource);
 
+  // --- NEW: Special logic for PATCHing transactions ---
+  if (resource === 'transactions' && req.method === 'PATCH' && data.status) {
+    const oldTransaction = resourceChain.find({ id: String(id) }).value();
+    const newStatus = data.status;
+
+    if (!oldTransaction) {
+      return res.status(404).jsonp({ error: `Transaction with id ${id} not found` });
+    }
+
+    if (newStatus !== oldTransaction.status) {
+      const productsDb = dbMap.products.get('products');
+      const product = productsDb.find({ id: String(oldTransaction.product.id) }).value();
+      let newStockQuantity = product.stockQuantity;
+
+      // Case 1: Reversing a COMPLETED order (e.g., to CANCELLED)
+      if (oldTransaction.status === 'COMPLETED') {
+        newStockQuantity = oldTransaction.transactionType === 'SELL'
+          ? product.stockQuantity + oldTransaction.totalProducts // Add stock back
+          : product.stockQuantity - oldTransaction.totalProducts; // Remove stock
+      }
+      
+      // Case 2: Fulfilling an order by setting it TO COMPLETED
+      if (newStatus === 'COMPLETED') {
+        newStockQuantity = oldTransaction.transactionType === 'SELL'
+          ? product.stockQuantity - oldTransaction.totalProducts // Remove stock
+          : product.stockQuantity + oldTransaction.totalProducts; // Add stock
+      }
+
+      // Save the updated stock quantity to products.json
+      productsDb.find({ id: String(product.id) }).assign({ stockQuantity: newStockQuantity }).write();
+      router.db.set('products', productsDb.value());
+    }
+
+    // Finally, update the transaction itself with the new status
+    const updatedTransaction = resourceChain.find({ id: String(id) }).assign(data).write();
+    router.db.set('transactions', resourceChain.value());
+    return res.jsonp(updatedTransaction);
+  }
+
+  // --- Logic for all other POST, PUT, PATCH, DELETE operations ---
   if (req.method === 'POST') {
     if (!data.id) data.id = `${Date.now()}-${Math.floor(Math.random() * 1000)}`;
     resourceChain.push(data).write();
@@ -182,7 +212,7 @@ server.use((req, res, next) => {
     return res.status(404).jsonp({ error: `${resource} with id ${id} not found` });
   }
   
-  if (req.method === 'PATCH') {
+  if (req.method === 'PATCH') { // For non-transaction patches
     const updatedItem = item.assign(data).write();
     router.db.set(resource, resourceChain.value());
     return res.jsonp(updatedItem);
@@ -198,7 +228,6 @@ server.use((req, res, next) => {
     return res.status(204).jsonp({});
   }
 });
-
 // --- Default Router ---
 server.use(API_PREFIX, router);
 

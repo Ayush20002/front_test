@@ -217,6 +217,39 @@
       "createdAt": "2025-09-24T16:32:26.617Z",
       "description": "hjk",
       "note": "jk"
+    },
+    {
+      "id": "1758815644291-687",
+      "transactionType": "PURCHASE",
+      "status": "CANCELLED",
+      "product": {
+        "id": "103",
+        "name": "Men's T-Shirt",
+        "sku": "TS-303-BLU",
+        "price": 19.99,
+        "stockQuantity": 202,
+        "categoryId": 3,
+        "description": "100% cotton t-shirt.",
+        "imageUrl": "https://placehold.co/600x400/EEE/31343C?text=T-Shirt"
+      },
+      "user": {
+        "id": "1",
+        "name": "Admin User",
+        "email": "dwivedi@gmail.com",
+        "phoneNumber": "123-456-7890",
+        "role": "ADMIN"
+      },
+      "supplier": {
+        "id": "2",
+        "name": "Publishing House Co.",
+        "contactInfo": "sales@publishco.com",
+        "address": "456 Book Street, New York, NY"
+      },
+      "totalProducts": 60,
+      "totalPrice": 1199.3999999999999,
+      "createdAt": "2025-09-25T15:54:04.291Z",
+      "description": "done",
+      "note": "asdf"
     }
   ]
 }

@@ -18,28 +18,34 @@ const TransactionsPage = () => {
   const itemsPerPage = 10;
 
   useEffect(() => {
-    const getTransactions = async () => {
-      try {
-        const transactionData = await ApiService.getAllTransactions(valueToSearch);
+  const getTransactions = async () => {
+    try {
+      const transactionData = await ApiService.getAllTransactions(valueToSearch);
 
-        // CORRECTED: Use the array directly for both calculations and setting state
-        setTotalPages(Math.ceil(transactionData.length / itemsPerPage));
+      // ADDED: Sort transactions by createdAt in descending order (latest first)
+      const sortedTransactions = transactionData.sort((a, b) => {
+        return new Date(b.createdAt) - new Date(a.createdAt);
+      });
 
-        setTransactions(
-          transactionData.slice(
-            (currentPage - 1) * itemsPerPage,
-            currentPage * itemsPerPage
-          )
-        );
-      } catch (error) {
-        showMessage(
-          error.response?.data?.message || "Error getting transactions."
-        );
-      }
-    };
+      // Use the sorted array for pagination calculations
+      setTotalPages(Math.ceil(sortedTransactions.length / itemsPerPage));
 
-    getTransactions();
-  }, [currentPage, valueToSearch]);
+      setTransactions(
+        sortedTransactions.slice(
+          (currentPage - 1) * itemsPerPage,
+          currentPage * itemsPerPage
+        )
+      );
+    } catch (error) {
+      showMessage(
+        error.response?.data?.message || "Error getting transactions."
+      );
+    }
+  };
+
+  getTransactions();
+}, [currentPage, valueToSearch]);
+
 
 
 
