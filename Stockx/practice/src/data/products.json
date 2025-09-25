@@ -5,7 +5,7 @@
       "name": "Men's T-Shirt",
       "sku": "TS-303-BLU",
       "price": 19.99,
-      "stockQuantity": 199,
+      "stockQuantity": 202,
       "categoryId": 3,
       "description": "100% cotton t-shirt.",
       "imageUrl": "https://placehold.co/600x400/EEE/31343C?text=T-Shirt"
