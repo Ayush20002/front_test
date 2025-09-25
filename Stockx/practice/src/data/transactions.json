@@ -250,6 +250,161 @@
       "createdAt": "2025-09-25T15:54:04.291Z",
       "description": "done",
       "note": "asdf"
+    },
+    {
+      "id": "1758823825190-670",
+      "transactionType": "PURCHASE",
+      "status": "PENDING",
+      "product": {
+        "id": "103",
+        "name": "Men's T-Shirt",
+        "sku": "TS-303-BLU",
+        "price": 19.99,
+        "stockQuantity": 202,
+        "categoryId": 3,
+        "description": "100% cotton t-shirt.",
+        "imageUrl": "https://placehold.co/600x400/EEE/31343C?text=T-Shirt"
+      },
+      "user": {
+        "id": "1",
+        "name": "Admin User",
+        "email": "dwivedi@gmail.com",
+        "phoneNumber": "123-456-7890",
+        "role": "ADMIN"
+      },
+      "supplier": {
+        "id": "2",
+        "name": "Publishing House Co.",
+        "contactInfo": "sales@publishco.com",
+        "address": "456 Book Street, New York, NY"
+      },
+      "totalProducts": 43,
+      "totalPrice": 859.5699999999999,
+      "createdAt": "2025-09-25T18:10:25.190Z",
+      "description": "dfa",
+      "note": "sasdf"
+    },
+    {
+      "id": "1758825140960-683",
+      "transactionType": "PURCHASE",
+      "status": "PENDING",
+      "product": {
+        "id": "103",
+        "name": "Men's T-Shirt",
+        "sku": "TS-303-BLU",
+        "price": 19.99,
+        "stockQuantity": 202,
+        "categoryId": 3,
+        "description": "100% cotton t-shirt.",
+        "imageUrl": "https://placehold.co/600x400/EEE/31343C?text=T-Shirt"
+      },
+      "user": {
+        "id": "1758739245154-509",
+        "name": "asdfa",
+        "email": "dfasdf@gmail.com",
+        "phoneNumber": "32432545534",
+        "role": "MANAGER"
+      },
+      "supplier": {
+        "id": "2",
+        "name": "Publishing House Co.",
+        "contactInfo": "sales@publishco.com",
+        "address": "456 Book Street, New York, NY"
+      },
+      "totalProducts": 43,
+      "totalPrice": 859.5699999999999,
+      "createdAt": "2025-09-25T18:32:20.960Z",
+      "description": "sfdgs",
+      "note": "sdgs"
+    },
+    {
+      "id": "1758825648898-607",
+      "transactionType": "SELL",
+      "status": "PENDING",
+      "product": {
+        "id": "103",
+        "name": "Men's T-Shirt",
+        "sku": "TS-303-BLU",
+        "price": 19.99,
+        "stockQuantity": 202,
+        "categoryId": 3,
+        "description": "100% cotton t-shirt.",
+        "imageUrl": "https://placehold.co/600x400/EEE/31343C?text=T-Shirt"
+      },
+      "user": {
+        "id": "1758739245154-509",
+        "name": "asdfa",
+        "email": "dfasdf@gmail.com",
+        "phoneNumber": "32432545534",
+        "role": "MANAGER"
+      },
+      "supplier": null,
+      "totalProducts": 32,
+      "totalPrice": 639.68,
+      "createdAt": "2025-09-25T18:40:48.898Z",
+      "description": "sd",
+      "note": "32"
+    },
+    {
+      "id": "1758828049681-778",
+      "transactionType": "PURCHASE",
+      "status": "PENDING",
+      "product": {
+        "id": "105",
+        "name": "Coffee Maker",
+        "sku": "CM-405-BLK",
+        "price": 89.99,
+        "stockQuantity": 59,
+        "categoryId": 4,
+        "description": "12-cup programmable coffee maker.",
+        "imageUrl": "https://placehold.co/600x400/EEE/31343C?text=Coffee+Maker"
+      },
+      "user": {
+        "id": "1758739245154-509",
+        "name": "asdfa",
+        "email": "dfasdf@gmail.com",
+        "phoneNumber": "32432545534",
+        "role": "MANAGER"
+      },
+      "supplier": {
+        "id": "2",
+        "name": "Publishing House Co.",
+        "contactInfo": "sales@publishco.com",
+        "address": "456 Book Street, New York, NY"
+      },
+      "totalProducts": 3,
+      "totalPrice": 269.96999999999997,
+      "createdAt": "2025-09-25T19:20:49.681Z",
+      "description": "dsf",
+      "note": "adsf"
+    },
+    {
+      "id": "1758828177813-496",
+      "transactionType": "SELL",
+      "status": "PENDING",
+      "product": {
+        "id": "103",
+        "name": "Men's T-Shirt",
+        "sku": "TS-303-BLU",
+        "price": 19.99,
+        "stockQuantity": 202,
+        "categoryId": 3,
+        "description": "100% cotton t-shirt.",
+        "imageUrl": "https://placehold.co/600x400/EEE/31343C?text=T-Shirt"
+      },
+      "user": {
+        "id": "1758739245154-509",
+        "name": "asdfa",
+        "email": "dfasdf@gmail.com",
+        "phoneNumber": "32432545534",
+        "role": "MANAGER"
+      },
+      "supplier": null,
+      "totalProducts": 3,
+      "totalPrice": 59.97,
+      "createdAt": "2025-09-25T19:22:57.813Z",
+      "description": "adf",
+      "note": "adsf"
     }
   ]
 }

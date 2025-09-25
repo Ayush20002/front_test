@@ -1354,7 +1354,7 @@ button[type="submit"]:hover {
 
 .message {
   background: linear-gradient(135deg, rgba(0, 212, 170, 0.1) 0%, rgba(0, 184, 148, 0.1) 100%);
-  color: var(--primary-hover);
+  color: var(--text-dark); /* #00B894 - THIS IS THE PROBLEM */
   padding: 1rem;
   border: 1px solid rgba(0, 212, 170, 0.3);
   border-radius: var(--border-radius);
@@ -1363,6 +1363,7 @@ button[type="submit"]:hover {
   font-weight: 600;
   backdrop-filter: blur(10px);
 }
+
 
 /* --- General Button & Keyframe Animations --- */
 button {

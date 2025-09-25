@@ -41,6 +41,7 @@ const SellPage = () => {
       description: description || "Product sale",
       note: note || "",
     };
+    console.log("Submitting sell data to API:", body);
 
     try {
       await ApiService.sellProduct(body);

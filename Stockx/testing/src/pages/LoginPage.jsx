@@ -1,12 +1,20 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { toast } from 'react-toastify';
 import ApiService from "../service/ApiService";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [message, setMessage] = useState("");
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // ADDED: This useEffect handles displaying messages passed from other pages (like Register)
+  useEffect(() => {
+    if (location.state?.message) {
+      toast.success(location.state.message);
+    }
+  }, [location.state]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -14,40 +22,29 @@ const LoginPage = () => {
       const loginData = { email, password };
       const response = await ApiService.loginUser(loginData);
 
-      // --- THIS IS THE CORRECTED LOGIC ---
-
-      // 1. Destructure the 'jwt' and user data from the response
       const { jwt, ...user } = response;
 
-      // 2. Save them to localStorage using the correct 'token' key
       localStorage.setItem('token', jwt);
       localStorage.setItem('user', JSON.stringify(user));
       
-      // 3. IMPORTANT: Immediately set the default auth header for all future requests
       ApiService.api.defaults.headers.common['Authorization'] = `Bearer ${jwt}`;
       
-      // 4. Now, navigate to the dashboard
-      navigate("/dashboard");
+      // CHANGED: Navigate to the dashboard WITH a success message
+      navigate("/dashboard", { state: { message: "Login Successful!" } });
       
     } catch (error) {
-      showMessage(
+      // CHANGED: Use toast for a consistent error message style
+      toast.error(
         error.response?.data?.message || "Invalid email or password."
       );
     }
-  };
-
-  const showMessage = (msg) => {
-    setMessage(msg);
-    setTimeout(() => {
-      setMessage("");
-    }, 3000);
   };
 
   return (
     <div className="auth-container">
       <h2>Login</h2>
 
-      {message && <p className="message">{message}</p>}
+      {/* The old <p> tag for messages is no longer needed */}
 
       <form onSubmit={handleLogin}>
         <input

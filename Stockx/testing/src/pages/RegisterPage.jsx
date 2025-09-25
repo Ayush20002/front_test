@@ -1,21 +1,33 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ApiService from "../service/ApiService"; // Assuming you have this service file
+import { toast } from 'react-toastify'; // Import toast for error messages
 
 const RegisterPage = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [message, setMessage] = useState("");
+  // The local message state is no longer needed if using toasts
+  // const [message, setMessage] = useState(""); 
   const navigate = useNavigate();
+
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
 
   const handleRegister = async (e) => {
     e.preventDefault();
 
+    if (!validateEmail(email)) {
+      toast.error("Please enter a valid email address.");
+      return;
+    }
+
     const phoneRegex = /^\d{10,15}$/;
     if (phoneNumber && !phoneRegex.test(phoneNumber)) {
-      showMessage("Please enter a valid phone number (10-15 digits).");
+      toast.error("Please enter a valid phone number (10-15 digits).");
       return;
     }
 
@@ -27,37 +39,30 @@ const RegisterPage = () => {
         phoneNumber,
       };
       
-      const response = await ApiService.registerUser(registerData);
+      // We call the API but don't need to handle the response here
+      await ApiService.registerUser(registerData);
       
-      // CORRECTED: The 'response' variable is the data object directly.
-      const { jwt, ...user } = response;
-
-      // Save the token and user info to localStorage
-      localStorage.setItem("token", jwt);
-      localStorage.setItem("user", JSON.stringify(user));
-
-      // Navigate directly to the dashboard
-      navigate("/dashboard");
+      // --- THIS IS THE CORRECTED LOGIC ---
+      // The old logic for saving the token is removed.
+      // Now, we just navigate to the login page with a success message.
+      navigate("/login", { 
+        state: { message: "Registration successful! Please log in." } 
+      });
 
     } catch (error) {
-      showMessage(
+      toast.error(
         error.response?.data?.message || "Error registering user."
       );
     }
   };
 
-  const showMessage = (msg) => {
-    setMessage(msg);
-    setTimeout(() => {
-      setMessage("");
-    }, 3000);
-  };
-
+  // The local showMessage function is replaced by toast notifications
+  
   return (
     <div className="auth-container">
       <h2>Register as a Manager</h2>
 
-      {message && <p className="message">{message}</p>}
+      {/* The message <p> tag is no longer needed */}
 
       <form onSubmit={handleRegister}>
         <input
@@ -86,7 +91,6 @@ const RegisterPage = () => {
           placeholder="Phone Number"
           value={phoneNumber}
           onChange={(e) => setPhoneNumber(e.target.value)}
-          
         />
         <button type="submit">Register</button>
       </form>

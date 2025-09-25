@@ -55,6 +55,7 @@ const PurchasePage = () => {
       description: description || "Inventory purchase",
       note: note || "",
     };
+    console.log("Submitting purchase data to API:", body);
 
     try {
       await ApiService.purchaseProduct(body);
@@ -63,6 +64,7 @@ const PurchasePage = () => {
       // Optionally navigate away after success
       // navigate("/transaction"); 
     } catch (error) {
+      console.error("API Error Response:", error.response);
       showMessage(error.response?.data?.message || "Error creating purchase.");
     }
   };

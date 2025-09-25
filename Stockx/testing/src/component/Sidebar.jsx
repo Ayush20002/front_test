@@ -1,14 +1,17 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom"; // Import useNavigate
 import ApiService from "../service/ApiService";
 
-const logout = () => {
-  ApiService.logout();
-};
-
 const Sidebar = () => {
+  const navigate = useNavigate();
   const isAuth = ApiService.isAuthenticated();
   const isAdmin = ApiService.isAdmin();
+  const isManager = ApiService.isManager(); // 1. ADDED: Get the manager status
+
+  const logout = () => {
+    ApiService.clearAuth(); // Use clearAuth from ApiService
+    navigate("/login");
+  };
 
   return (
     <div className="sidebar">
@@ -16,7 +19,8 @@ const Sidebar = () => {
       <ul className="nav-links">
         {isAuth && (
           <li>
-            <Link to="/dashboard">Dashboaard</Link>
+            {/* Corrected spelling of Dashboard */}
+            <Link to="/dashboard">Dashboard</Link>
           </li>
         )}
 
@@ -26,21 +30,23 @@ const Sidebar = () => {
           </li>
         )}
 
+        {/* These links will only be shown to Admins */}
         {isAdmin && (
           <li>
             <Link to="/category">Category</Link>
           </li>
         )}
-
-        {isAdmin && (
-          <li>
-            <Link to="/product">Product</Link>
-          </li>
-        )}
-
+        
         {isAdmin && (
           <li>
             <Link to="/supplier">Supplier</Link>
+          </li>
+        )}
+
+        {/* 2. CHANGED: This link will now be shown to Managers AND Admins */}
+        {isManager && (
+          <li>
+            <Link to="/product">Product</Link>
           </li>
         )}
 
@@ -64,9 +70,10 @@ const Sidebar = () => {
 
         {isAuth && (
           <li>
-            <Link onClick={logout} to="/login">
+            {/* Changed to a button for better practice, but Link is fine too */}
+            <button onClick={logout} className="logout-button">
               Logout
-            </Link>
+            </button>
           </li>
         )}
       </ul>

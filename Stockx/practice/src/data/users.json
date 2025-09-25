@@ -111,6 +111,46 @@
       "password": "hashed_12345_1758739245154",
       "phoneNumber": "32432545534",
       "role": "MANAGER"
+    },
+    {
+      "id": "1758817903210-754",
+      "name": "asdfasd",
+      "email": "dwivedi@gmasd",
+      "password": "hashed_12345_1758817903210",
+      "phoneNumber": "9853654287",
+      "role": "MANAGER"
+    },
+    {
+      "id": "1758818084038-182",
+      "name": "fsdg",
+      "email": "asdf@gmail.com",
+      "password": "hashed_sdfgs_1758818084039",
+      "phoneNumber": "9586575853",
+      "role": "MANAGER"
+    },
+    {
+      "id": "1758822233878-819",
+      "name": "fvee",
+      "email": "dwivreedi@gmail.com",
+      "password": "hashed_12345_1758822233878",
+      "phoneNumber": "9586521486",
+      "role": "MANAGER"
+    },
+    {
+      "id": "1758826917919-224",
+      "name": "fsdg",
+      "email": "fdsg",
+      "password": "hashed_dfds_1758826917919",
+      "phoneNumber": "9586575853",
+      "role": "MANAGER"
+    },
+    {
+      "id": "1758827932625-665",
+      "name": "fsdg",
+      "email": "fdsdsg",
+      "password": "hashed_dfdfsas_1758827932625",
+      "phoneNumber": "9586575853",
+      "role": "MANAGER"
     }
   ]
 }

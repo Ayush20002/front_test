@@ -67,6 +67,10 @@ server.post(`${API_PREFIX}/auth/register`, (req, res) => {
   if (phoneNumber && !/^\d{10,15}$/.test(phoneNumber)) {
     return res.status(400).jsonp({ message: 'Phone number must be between 10 and 15 digits.' });
   }
+  const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+  if (!emailRegex.test(email)) {
+    return res.status(400).jsonp({ message: 'Please provide a valid email address.' });
+  }
 
   const usersDb = dbMap.users.get('users');
   const existingUser = usersDb.find({ email }).value();
@@ -111,6 +115,9 @@ server.get(`${API_PREFIX}/users`, (req, res) => {
 
 // --- Custom Sell/Purchase Transactions Handler ---
 server.use((req, res, next) => {
+  console.log('--- Checking Transaction Middleware ---');
+  console.log('Request Path:', req.path);
+  console.log('Request Method:', req.method);
   const isSell = req.path.endsWith('/transactions/sell');
   const isPurchase = req.path.endsWith('/transactions/purchase');
 
